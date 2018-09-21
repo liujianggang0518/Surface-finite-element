@@ -1,0 +1,9 @@
+\BOOKMARK [1][]{section.1}{1 预备知识}{}% 1
+\BOOKMARK [2][]{subsection.1.1}{1.1 连续的曲面S}{section.1}% 2
+\BOOKMARK [2][]{subsection.1.2}{1.2 离散的曲面Sh和网格Th}{section.1}% 3
+\BOOKMARK [1][]{section.2}{2 曲面线性有限元}{}% 4
+\BOOKMARK [1][]{section.3}{3 曲面高次元}{}% 5
+\BOOKMARK [2][]{subsection.3.1}{3.1 符号说明}{section.3}% 6
+\BOOKMARK [2][]{subsection.3.2}{3.2 h p和s之间关系}{section.3}% 7
+\BOOKMARK [2][]{subsection.3.3}{3.3 S上曲面三角形的面积计算公式}{section.3}% 8
+\BOOKMARK [2][]{subsection.3.4}{3.4 S上的导数计算}{section.3}% 9

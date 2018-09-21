@@ -1,0 +1,333 @@
+% !Mode:: "TeX:UTF-8"
+\documentclass{article}
+\input{en_preamble.tex}
+\input{xecjk_preamble.tex}
+\setCJKmainfont{STKaiti} % 如果请替换为本地系统有的字体
+%中文断行
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 16pt plus 16pt 
+\begin{document}
+\title{曲面有限元及其应用}
+\author{刘江刚 \ \ 龚欣}
+\date{\today}
+\maketitle
+%\tableofcontents
+\newpage
+\section{预备知识}
+\subsection{连续的曲面$S$}
+设$S$是一个闭曲面,所以$\partial S=\varnothing$,所以$S$把$\mathbb{R}^3$分成三个不同的集合：曲面内部的点、曲面上的点和曲面外部的点,分别表示为$\Omega_{-}$、$\Omega_0$和$\Omega_{+}$.对于任意的$x\in\mathbb{R}^3$,记$\mathrm{dist}(x,S)=\min\limits_{y\in S}\left|x-y\right|$为$x$和$S$之间的距离，其中$|\cdot|$为标准的欧氏距离.我们可以定义一个带状区域：$U:=\left\{x\in\mathbb{R}^3|\mathrm{dist}(x,S)<\delta\right\}$,其中$\delta>0$且要足够小,使得可以定义一个唯一的符号距离函数$d:U\rightarrow\mathbb{R}$,满足如下性质：
+\begin{equation}\label{eq:MA}
+\left\{
+\begin{array}{l}
+d\in C^3(U),\\
+|d(x)|=\mathrm{dist}(x,S),\quad \forall x\in U,\\
+d(x)< 0,\quad\forall x\in\Omega_{-}\cap U,\\
+d(x)= 0,\quad\forall x\in \Omega_0\cap U,\\
+d(x)> 0,\quad\forall x\in\Omega_{+}\cap U,\\
+\end{array}\right.
+\end{equation}
+对于任意的$x\in U$,可视$S$为符号距离函数的零水平集.
+
+记$\nabla$为$\mathbb{R}^3$中通常意义下的梯度算子,$\nabla d(x)\in\mathbb{R}^3$为$d(x)$的梯度，$\boldsymbol{H}(x):=\nabla^2d(x)\in\mathbb{R}^{3\times 3}$为$d(x)$的Hessian矩阵.对于任意的$x\in U$,记$y$为$S$上离$x$最近的点,也即$|d(x)|=\left|x-y\right|$.因为$d(x)$是符号距离函数,且$S$是它的零水平集,易知$\nabla d(x)$是$S$在$y$处的单位外法向向量,即$\left|\nabla d(x)\right|=1$.对于任意的$x\in U$,记$\boldsymbol{n}(x)=\nabla d(x)$,我们可以定义如下唯一的投影
+$\mathcal{P}_0:U\rightarrow S$:
+\begin{equation*}
+\mathcal{P}_0(x):=x-d(x)\boldsymbol{n}(x)\quad(1)
+\end{equation*}
+
+对于$v\in C^1(S)$,因为$S$是$C^3$的,我们可以把$v$扩展到$C^1(U)$,且仍记为$v$.定义$v$在$S$上的切向梯度为
+\begin{equation*}
+\nabla_Sv=\nabla v-(\nabla v\cdot\boldsymbol{n})\boldsymbol{n}=(I-\boldsymbol{n}\boldsymbol{n}^t)\nabla v=\boldsymbol{P}\nabla v\in\mathbb{R}^3
+\end{equation*}
+其中$\boldsymbol{P}(x)=(I-\boldsymbol{n}\boldsymbol{n}^t)(x)$是到点$x\in S$切平面上的投影算子,因此有$\boldsymbol{P}^2=\boldsymbol{P}$.注意到这里我们用$v$的扩展来定义曲面梯度.然而,可以证明$\nabla_Sv$的定义只依赖$v$的$S$上的值而不是$v$的扩展,也即$\nabla_S$是一个内蕴算子.
+\newpage
+类似地,对于一个向量场$\boldsymbol{v}\in(C^1(S))^3$,我们也可以把它扩展到$(C^1(U))^3$上去,并定义$\boldsymbol{v}$在$S$上的切向散度为
+\begin{equation*}
+\nabla_S\cdot\boldsymbol{v}=\nabla\cdot\boldsymbol{v}-\boldsymbol{n}^t\nabla\boldsymbol{v}\boldsymbol{n}\in\mathbb{R}
+\end{equation*}
+
+曲面S上的Laplace-Beltrami算子定义如下：
+\begin{equation*}
+\Delta_Sv=\nabla_S\cdot(\nabla_Sv)=\Delta v-(\nabla v\cdot\boldsymbol{n})(\nabla\cdot\boldsymbol{n})-\boldsymbol{n}^t\nabla^2v\boldsymbol{n}\in\mathbb{R}
+\end{equation*}
+其中$v\in C^2(S)$,$\nabla^2v$是$v$的Hessian矩阵(扩展为$C^2(U)$函数)
+\subsection{离散的曲面$S_h$和网格$\mathcal{T}_h$}
+记$S_h\subset U$是由三角形单元$\tau_h$组成的多面体面,即$S_h$逼近曲面$S$,我们假设$S_h$的这些三角形单元是正则的,单元尺寸是拟一致的,且它们的顶点都在曲面$S$上.其中$\mathcal{N}_h=\left\{x_i\right\}$为$S_h$所有顶点的集合,$\mathcal{T}_h=\left\{\tau_h\right\}$ 为所有三角形单元的集合,$\mathcal{E}_h=\left\{E\right\}$为所有边的集合.对于任意的$\tau_h\in\mathcal{T}_h$,记$\boldsymbol{n}_h$为$S_h$在$\tau_h$上的单位外法向向量.对于$v_h\in C(S_h)$和$v_h|_{\tau_h}$,我们有
+\begin{equation*}
+\nabla_{S_h}v_h|_{\tau_h}:=\nabla v_h-(\nabla v_h\cdot\boldsymbol{n}_h)\boldsymbol{n}_h=(\boldsymbol{I}-\boldsymbol{n}_h\boldsymbol{n}^t_h)\nabla v_h=\boldsymbol{P}_h\nabla v_h\in\mathbb{R}^3
+\end{equation*}
+其中$\boldsymbol{P}_h=\boldsymbol{I}-\boldsymbol{n}_h\boldsymbol{n}^t_h\in\mathbb{R}^{3\times 3}$.显然$\nabla_{S_h}v_h\in(L^2(S_h))^3$
+
+如果限制投影$\mathcal{P}_0:U\rightarrow S$到$S_h$上,就得到一个从$S_h$到$S$的连续可微的双射,仍记为$\mathcal{P}_0$.对于任意的$\tau_h\in\mathcal{T}_h$,我们可以得到一个曲面三角形$\tau:=\mathcal{P}_0(\tau_h)$,并记所有的曲面三角形集合为$\mathcal{T}_S$.
+
+下面我们建立定义在$S$和$S_h$函数之间的关系.借助双射投影$\mathcal{P}_0$,可以由函数$v:S\rightarrow\mathbb{R}$唯一地引入另一个函数$\bar{v}:S_h\rightarrow\mathbb{R}$.对于所有的$x\in S_h$,有$\bar{v}(x)=v(\mathcal{P}_0(x))$.对于任意的$\tau_h\in\mathcal{T}_h$和函数$v\in C^1(\mathcal{P}_0(\tau_h))$,我们有
+\begin{equation*}
+\nabla_{S_h}\bar{v}(x)=(\boldsymbol{P}_h(\boldsymbol{I}-d\boldsymbol{H})\boldsymbol{P})(x)\nabla_{S}v(\mathcal{P}_0(x))\quad\forall x\in \tau_h.
+\end{equation*}
+反过来,一个函数$v_h:S_h\rightarrow\mathbb{R}$也可以唯一的引入一个函数$\tilde{v}_h:S\rightarrow\mathbb{R}$,对于所有的$x\in S$,有$\tilde{v}_h(x)=v_h(\mathcal{P}^{-1}_0(x))$.对于任意的$\tau_h\in\mathcal{T}_h$和函数$v_h\in C^1(\tau_h)$让$\tau=\mathcal{P}_0(\tau_h)$,可得
+\begin{equation*}
+\nabla_{S}\tilde{v}_h(x)=(\boldsymbol{I}-d\boldsymbol{H})^{-1}\left(\boldsymbol{I}-\frac{\boldsymbol{n}_h\boldsymbol{n}^t}{\boldsymbol{n}^t\boldsymbol{n}_h}\right)\nabla_{S_h}v_h(\mathcal{P}^{-1}_0(x))\quad\forall x\in\tau.
+\end{equation*}
+
+\newpage
+
+\section{曲面线性有限元}
+
+对于三角形$\tau_h\in\mathcal{T}_h$, 记$\{\lambda_i\}$为$\tau_h$的重心坐标.   
+记$\mathcal V_h$为$S_h$上的连续分片线性有限元空间, 也即对于任意的$v_h\in \mathcal V_h$和$\tau_h \in \mathcal T_h$,
+$v_h$在$S_h$上连续, 且有$v_h|_{\tau_h}\in {\rm span}\{\lambda_1,\lambda_2,\lambda_3\}$.  
+我们可定义$S$上的提升空间
+\begin{eqnarray*}
+ \tilde{V}_{h} & = &
+\{\tilde{v}_{h} \, | \, \tilde{v}_{h}:=v_{h}\circ\mathcal{P}_{0}^{-1},\,
+\text{其中 }v_{h}\in \mathcal V_h\},
+\end{eqnarray*}
+其中$\mathcal P_0: S_h \to S$为定义在(1)中的双射.   
+对于$f\in L^{2}(S)$, 记
+\begin{equation}\label{eq:fh}
+f_{h}(x)=\bar{f}(x)-\frac{1}{|S_{h}|}\int_{S_{h}} \bar f \, \mathrm{d}\sigma_{h},
+\end{equation}
+其中$|S_{h}|$ 为 $ S_{h}$的总面积. 那么有
+$\int_{S_{h}}f_{h}(x)\,\mathrm{d}\sigma_{h}=0$, 且下列方程存在唯一的有限元解
+$u_{h}\in \mathcal V_h$, 满足$\int_{S_{h}}u_{h}\,\mathrm{d}\sigma_{h}=0$
+\begin{equation*}
+\int_{S_h}\nabla_{S_h}u_h\cdot\nabla_{S_h}v_h\mathrm{d}\sigma_h=\int_{S_h}f_hv_h\mathrm{d}\sigma_h\quad\forall v_h\in\mathcal{V}_h
+\end{equation*}
+\newpage
+\section{曲面高次元}
+\subsection{符号说明}
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|c|c|}
+ \hline
+ $S$  &$\mathbb R^3$ 空间中的曲面\\
+ \hline
+ $K\subset \mathbb R^2$  &二维空间中的标准单元\\
+ \hline
+ $\mathbf u = (u, v)^T$  &二维空间中的坐标系\\
+ \hline
+ $\tau_h \subset R^3$  &三维空间中的尺寸为 $h$ 的平面三角形\\  
+ \hline
+ $\mathbf x = (x, y, z)^T\in \tau_h$  &$\tau_h$ 上的一个点\\
+ \hline
+ $\mathcal P_0$  &$S$ 邻近区域到 $S$ 的投影\\
+ \hline
+ $\mathbf x_i,  i=1,\cdots, n_{dof}$  &$\tau_h$ 上 $p$ 次 Lagrangian 基函数对应的自由度坐标点\\
+ \hline
+ $\tau_p\subset \mathbb R^3$ &定义在 $\tau_h$ 上的 $p$ 次多项式曲面三角形\\
+ \hline
+ $ \mathbf x_p =(x_p, y_p, z_p)^T \in \tau_p$ & $\tau_p$ 上一个点的三维坐标\\
+ \hline
+ $\tau_S\subset \mathbb R^3$ & 把 $\tau_h$ 投影到曲面 $S$ 上的曲面三角形\\
+ \hline
+ $ \mathbf x_S =(x_S, y_S, z_S)^T \in \tau_S$ & $\tau_S$ 上一个点的三维坐标 \\
+ \hline
+ $\varphi_i(\mathbf x)$ & 定义在 $\tau_h$ 上第 $i$ 个 Lagrangian 基函数\\
+ \hline 
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection{$\tau_h$$\quad$$\tau_p$和$\tau_s$之间关系}
+
+对于 $\tau_p$ 上的任意一点 $\mathbf x_p$, 存在一点 $\mathbf x \in \tau_h$， 使得
+\begin{equation*}
+\mathbf x_p = \sum_{i=1}^{n_{dof}} \mathbf x_i \varphi_i(\mathbf x)
+\end{equation*}
+进一步， 存在标准参考单元 $K$ 中存在一点 $\mathbf u = (u,v)$， 可得
+\begin{equation*}
+\mathbf x(u,v) = \lambda_0 \mathbf x_0 + \lambda_1 \mathbf x_1 + \lambda_2 \mathbf x_2
+\end{equation*}
+其中 $\mathbf x_0$, $\mathbf x_1$ 和 $\mathbf x_2$ 为$\tau_h$ 的三个顶点, 
+\begin{equation*}
+\lambda_0 = 1- u - v,\quad\lambda_1 = u,\quad\lambda_2 = v
+\end{equation*}
+对于 $\tau_S$ 上的任意一点 $\mathbf x_S$, 存在 $\tau_p$ 上的一点 $\mathbf x_p$， 使得
+\begin{equation*}
+\mathbf x_S = \mathcal P_0(\mathbf x_p)
+\end{equation*}
+$\mathbf x$ 关于  $(u, v)$ 的 Jacobi 矩阵为
+\begin{equation*}
+\frac{\partial \mathbf x}{\partial \mathbf u} = [\mathbf x_1 - \mathbf x_0, \mathbf x_2 - \mathbf x_0]
+\end{equation*}
+$\mathbf x_p$ 关于 $\mathbf x$ 的 Jacobi 矩阵为
+\begin{equation*}
+\frac{\partial \mathbf x_p}{\partial \mathbf x} = \sum_{i=1}^{n_{dof}}
+\begin{bmatrix}
+x_i\nabla_{\mathbf x}\varphi_i(\mathbf x)^T\\
+y_i\nabla_{\mathbf x}\varphi_i(\mathbf x)^T\\
+z_i\nabla_{\mathbf x}\varphi_i(\mathbf x)^T\\
+\end{bmatrix}
+\end{equation*}
+则 $\mathbf x_p$ 关于 $\mathbf u$ 的 Jacobi 矩阵为
+\begin{equation*}
+\frac{\partial \mathbf x_p}{\partial \mathbf u}=[\frac{\partial \mathbf x_p}{\partial u}, \frac{\partial \mathbf x_p}{\partial v}]=\sum_{i=1}^{n_{dof}}
+\begin{bmatrix}
+x_i\nabla_{\mathbf x}\varphi_i(\mathbf x)^T\\
+y_i\nabla_{\mathbf x}\varphi_i(\mathbf x)^T\\
+z_i\nabla_{\mathbf x}\varphi_i(\mathbf x)^T\\
+\end{bmatrix}
+[\mathbf x_1 - \mathbf x_0, \mathbf x_2 - \mathbf x_0]\qquad(2)
+\end{equation*}
+记
+\begin{equation*} 
+\mathrm d \mathbf x_p = \frac{\partial \mathbf x_p}{\partial \mathbf u}\mathrm d \mathbf u = \frac{\partial \mathbf x_p}{\partial u}\mathrm d u + \frac{\partial \mathbf x_p}{\partial v}\mathrm d v,
+\end{equation*}
+其中 $\mathrm d \mathbf u = [\mathrm d u, \mathrm d v]^T$.
+进一步可得曲面三角形 $\tau_p$ 上的第一基本形式
+\begin{equation*}
+I = <\mathrm d \mathbf x_p, \mathrm d \mathbf x_p> = \mathrm d \mathbf u^T 
+\begin{bmatrix}
+g_{11} & g_{12}\\
+g_{12} & g_{22}
+\end{bmatrix}
+\mathrm d \mathbf u
+\end{equation*}
+其中 
+\begin{equation*}
+g_{11} =<\frac{\partial \mathbf x_p}{\partial u}, \frac{\partial \mathbf x_p}{\partial u}>, 
+g_{12} =<\frac{\partial \mathbf x_p}{\partial u}, \frac{\partial \mathbf x_p}{\partial v}>, 
+g_{22} =<\frac{\partial \mathbf x_p}{\partial v}, \frac{\partial \mathbf x_p}{\partial v}>, 
+\end{equation*}
+定义$\tau_p$ 上的基函数如下
+\begin{equation*}
+\varphi_{p,i}(\mathbf x_p) =\varphi_i(\mathbf x) 
+\end{equation*}
+其中
+\begin{equation*}
+\mathbf x_p = \sum_{i=1}^{n_{dof}} \mathbf x_i \varphi_i(\mathbf x)
+\end{equation*}
+则 $\varphi_{p,i}(\mathbf x_p)$ 在 $\tau_p$ 上的切向导数定义如下：
+\begin{equation*}
+\nabla_{S_p} \varphi_{p,i} = \frac{\partial \mathbf x_p}{\partial \mathbf u}\begin{bmatrix}
+g_{11} & g_{12}\\
+g_{12} & g_{22}
+\end{bmatrix}^{-1}(\frac{\partial \mathbf x}{\partial \mathbf u})^T\nabla_{S_h}\varphi_i(\mathbf x)
+\end{equation*}
+
+\subsection{$S$上曲面三角形的面积计算公式}
+
+\begin{equation*}
+\mathcal P_0(\mathbf x):=\mathbf x - d(\mathbf x)\mathbf n(\mathbf x)
+\end{equation*}
+对于$\mathbf x_p \in \tau_p$, 存在 $\mathbf x_S \in S$, 有
+\begin{equation*}
+\mathbf x_S = \mathcal P_0(\mathbf x_p)=\mathbf x_p - d(\mathbf x_p)\mathbf n(\mathbf x_p)
+\end{equation*}
+\begin{equation*}
+\frac{\partial \mathbf x_S}{\partial\mathbf x_p} = I - d(\mathbf x_p) H(\mathbf x_p) - \mathbf n(\mathbf x_p)\mathbf n(\mathbf x_p)^T
+\end{equation*}
+\begin{equation*}
+\frac{\partial \mathbf x_S}{\partial\mathbf u} = \frac{\partial \mathbf x_S}{\partial\mathbf x_p}\frac{\partial \mathbf x_p}{\partial\mathbf u}
+\end{equation*}
+
+\subsection{$S$上的导数计算}
+
+考虑 $\tau_S$ 和 $\tau_p$ 的关系
+
+则 $\mathbf x_S$ 关于 $\mathbf u$ 的 Jacobi 矩阵为
+\begin{equation*}
+\frac{\partial \mathbf x_S}{\partial\mathbf u} = \frac{\partial \mathbf x_S}{\partial\mathbf x_p}\frac{\partial \mathbf x_p}{\partial\mathbf u}
+\end{equation*}
+\begin{equation*}
+\frac{\partial \mathbf x_S}{\partial\mathbf x_p} = I - d(\mathbf x_p) H(\mathbf x_p) - \mathbf n(\mathbf x_p)\mathbf n(\mathbf x_p)^T
+\end{equation*}
+由于
+\begin{equation*}
+\frac{\partial \mathbf x_p}{\partial \mathbf u}=[\frac{\partial \mathbf x_p}{\partial u}, \frac{\partial \mathbf x_p}{\partial v}]=\sum_{i=1}^{n_{dof}}
+\begin{bmatrix}
+x_i\nabla_{\mathbf x}\varphi_i(\mathbf x)^T\\
+y_i\nabla_{\mathbf x}\varphi_i(\mathbf x)^T\\
+z_i\nabla_{\mathbf x}\varphi_i(\mathbf x)^T\\
+\end{bmatrix}
+[\mathbf x_1 - \mathbf x_0, \mathbf x_2 - \mathbf x_0]
+\end{equation*}
+即,很容易计算
+\begin{equation*}
+\frac{\partial \mathbf x_S}{\partial\mathbf u}
+\end{equation*}
+进一步可得到曲面 $\tau_S$ 上的第一基本形式
+记
+\begin{equation*} 
+\mathrm d \mathbf x_S = \frac{\partial \mathbf x_S}{\partial \mathbf u}\mathrm d \mathbf u = \frac{\partial \mathbf x_S}{\partial u}\mathrm d u + \frac{\partial \mathbf x_S}{\partial v}\mathrm d v,
+\end{equation*}
+其中
+\begin{equation*}
+\begin{aligned}
+\mathrm d \mathbf x_S & = \frac{\partial \mathbf x_S}{\partial \mathbf u}\mathrm d \mathbf u \\
+& =\frac{\partial \mathbf x_S}{\partial\mathbf x_p}\frac{\partial \mathbf x_p}{\partial\mathbf u}\mathrm d \mathbf u \\
+& = \frac{\partial \mathbf x_S}{\partial\mathbf x_p}\frac{\partial \mathbf x_p}{\partial u}\mathrm d u + \frac{\partial \mathbf x_S}{\partial\mathbf x_p}\frac{\partial \mathbf x_p}{\partial v}\mathrm d v\\
+\end{aligned}
+\end{equation*}
+故
+\begin{equation*}
+\begin{aligned}
+\frac{\partial \mathbf x_S}{\partial u} &= \frac{\partial \mathbf x_S}{\partial\mathbf x_p}\frac{\partial \mathbf x_p}{\partial u}\\
+\frac{\partial \mathbf x_S}{\partial v} &= \frac{\partial \mathbf x_S}{\partial\mathbf x_p}\frac{\partial \mathbf x_p}{\partial v}
+\end{aligned}
+\end{equation*}
+\begin{equation*}
+I = <\mathrm d \mathbf x_S, \mathrm d \mathbf x_S> = \mathrm d \mathbf u^T 
+\begin{bmatrix}
+g'_{11} & g'_{12}\\
+g'_{12} & g'_{22}
+\end{bmatrix}
+\mathrm d \mathbf u
+\end{equation*}
+其中 
+\begin{equation*}
+g'_{11} =<\frac{\partial \mathbf x_S}{\partial u}, \frac{\partial \mathbf x_S}{\partial u}>, 
+g'_{12} =<\frac{\partial \mathbf x_S}{\partial u}, \frac{\partial \mathbf x_S}{\partial v}>, 
+g'_{22} =<\frac{\partial \mathbf x_S}{\partial v}, \frac{\partial \mathbf x_S}{\partial v}>, 
+\end{equation*}
+定义$\tau_S$ 上的基函数如下
+\begin{equation*}
+\varphi_{S,i}(\mathbf x_S) =\varphi_{i}(\mathbf x) 
+\end{equation*}
+其中
+\begin{equation*}
+\mathbf x_S = \sum_{i=1}^{n_{dof}} \mathbf x_i \varphi_{i}(\mathbf x) 
+\end{equation*}
+则 $\varphi_{S,i}(\mathbf x_S)$ 在 $\tau_S$ 上的导数定义如下：
+\begin{equation*}
+\nabla_{S_S} \varphi_{S,i} = \frac{\partial \mathbf x_S}{\partial \mathbf u}\begin{bmatrix}
+g'_{11} & g'_{12}\\
+g'_{12} & g'_{22}
+\end{bmatrix}^{-1}(\frac{\partial \mathbf x}{\partial \mathbf u})^T\nabla_{S_h}\varphi_{i}(\mathbf x) 
+\end{equation*}
+设 $w(\mathbf x_S)$ 是定义在 $S$ 上的函数， 利用投影可以定义 $S_p$ 上函数 
+\begin{equation*}
+\hat w(\mathbf x_p) = w(\mathcal P_0(x_p))
+\end{equation*}
+下面讨论如何计算 $\nabla_{S_p} w$. 
+\begin{equation*}
+\nabla_{S_p} \hat w(\mathbf x_p) = \frac{\partial \mathbf x_p}{\partial \mathbf u}\begin{bmatrix}
+g_{11} & g_{12}\\
+g_{12} & g_{22}
+\end{bmatrix}^{-1}
+\begin{pmatrix}
+\hat w_u \\ \hat w_v
+\end{pmatrix}
+\end{equation*}
+\begin{equation*}
+\begin{pmatrix}
+\hat w_u \\ \hat w_v
+\end{pmatrix}
+= (\frac{\partial \mathbf x_S}{\partial \mathbf u})^T \nabla_{\mathbf x_S} w(x_S)
+\end{equation*}
+
+
+
+
+
+
+
+
+
+
+
+
+\nocite{*}
+\bibliography{}
+\end{document}
+
+
