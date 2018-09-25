@@ -13,6 +13,82 @@
 \maketitle
 %\tableofcontents
 \newpage
+\section{基础知识}
+\subsection{梯度}
+首先给出梯度的概念，它是由数量函数$u(x,y,z)$所定义的向量函数
+\begin{equation*}
+\text{grad}~u=\left(\frac{\partial u}{\partial x},\frac{\partial u}{\partial y},\frac{\partial u}{\partial z}\right) 
+\end{equation*}
+而且$\text{grad}~u$的方向就是使$\frac{\partial u}{\partial l}$达到最大值的方向，它的大小就是$u$在这个方向上的方向导数.
+
+引进符号向量
+\begin{equation*}
+\nabla=\left(\frac{\partial}{\partial x},\frac{\partial}{\partial y},\frac{\partial}{\partial z}\right)
+\end{equation*}
+当把它作为运算符号来看待时，梯度可写作
+\begin{equation*}
+\text{grad}~u=\nabla u
+\end{equation*}
+
+关于梯度,有以下一些基本性质：
+
+1.若$u,v$是数量函数，则
+\begin{equation*}
+\nabla(u+v)=\nabla u+\nabla v
+\end{equation*}
+
+2.若$u,v$是数量函数，则
+\begin{equation*}
+\nabla(uv)=u(\nabla v)+v(\nabla u)
+\end{equation*}
+
+3.若$u(x,y,z)$是数量函数，则$\nabla^2u(x)\in R^{3\times 3}$为$u(x)$的Hessian矩阵
+\begin{equation*}
+\nabla^2u(x)=
+\begin{pmatrix}
+\frac{\partial^2u}{\partial x^2} & \frac{\partial^2u}{\partial x\partial y} & \frac{\partial^2u}{\partial x\partial z} \\
+\frac{\partial^2u}{\partial y\partial x} & \frac{\partial^2u}{\partial y^2} & \frac{\partial^2u}{\partial y\partial z} \\
+\frac{\partial^2u}{\partial z\partial x} & \frac{\partial^2u}{\partial z\partial y} & \frac{\partial^2u}{\partial z^2} 
+\end{pmatrix}
+\end{equation*}
+\subsection{散度}
+设
+\begin{equation*}
+\boldsymbol{A}(x,y,z)=(P(x,y,z),Q(x,y,z),R(x,y,z))
+\end{equation*}
+为空间区域$V$上的向量函数,对$V$上每一点$(x,y,z)$,定义数量函数
+\begin{equation*}
+D(x,y,z)=\frac{\partial P}{\partial x}+\frac{\partial Q}{\partial y}+\frac{\partial R}{\partial z}
+\end{equation*}
+称它为向量函数$\boldsymbol{A}$在$(x,y,z)$处的散度,记作
+\begin{equation*}
+D(x,y,z)=\text{div}~\boldsymbol{A}(x,y,z)
+\end{equation*}
+
+由前面引进的算符$\nabla$,$\boldsymbol{A}$的散度的向量形式是
+\begin{equation*}
+\text{div}~\boldsymbol{A}=\nabla\cdot\boldsymbol{A}
+\end{equation*}
+关于散度,有以下一些基本性质：
+
+1.若$\boldsymbol{u},\boldsymbol{v}$是向量函数,则
+\begin{equation*}
+\nabla\cdot(\boldsymbol{u}+\boldsymbol{v})=\nabla\cdot\boldsymbol{u}+\nabla\cdot\boldsymbol{v}
+\end{equation*}
+
+2.若$\varphi$是数量函数,$\boldsymbol{F}$是向量函数,则
+\begin{equation*}
+\nabla\cdot(\varphi\boldsymbol{F})=\varphi\nabla\cdot\boldsymbol{F}+F\cdot\nabla\varphi
+\end{equation*}
+
+3.若$\varphi=\varphi(x,y,z)$是一数量函数,则
+\begin{equation*}
+\nabla\cdot\nabla\varphi=\frac{\partial^2\varphi}{\partial x^2}+\frac{\partial^2\varphi}{\partial y^2}+\frac{\partial^2\varphi}{\partial z^2}
+\end{equation*}
+算符$\nabla$的内积$\nabla\cdot\nabla$常记作$\Delta$,于是有
+\begin{equation*}
+\nabla\cdot\nabla\varphi=\Delta\varphi
+\end{equation*}
 \section{预备知识}
 \subsection{连续的曲面$S$}
 设$S$是一个闭曲面,所以$\partial S=\varnothing$,所以$S$把$\mathbb{R}^3$分成三个不同的集合：曲面内部的点、曲面上的点和曲面外部的点,分别表示为$\Omega_{-}$、$\Omega_0$和$\Omega_{+}$.对于任意的$x\in\mathbb{R}^3$,记$\mathrm{dist}(x,S)=\min\limits_{y\in S}\left|x-y\right|$为$x$和$S$之间的距离，其中$|\cdot|$为标准的欧氏距离.我们可以定义一个带状区域：$U:=\left\{x\in\mathbb{R}^3|\mathrm{dist}(x,S)<\delta\right\}$,其中$\delta>0$且要足够小,使得可以定义一个唯一的符号距离函数$d:U\rightarrow\mathbb{R}$,满足如下性质：
@@ -39,7 +115,7 @@ $\mathcal{P}_0:U\rightarrow S$:
 \nabla_Sv=\nabla v-(\nabla v\cdot\boldsymbol{n})\boldsymbol{n}=(I-\boldsymbol{n}\boldsymbol{n}^t)\nabla v=\boldsymbol{P}\nabla v\in\mathbb{R}^3
 \end{equation*}
 其中$\boldsymbol{P}(x)=(I-\boldsymbol{n}\boldsymbol{n}^t)(x)$是到点$x\in S$切平面上的投影算子,因此有$\boldsymbol{P}^2=\boldsymbol{P}$.注意到这里我们用$v$的扩展来定义曲面梯度.然而,可以证明$\nabla_Sv$的定义只依赖$v$的$S$上的值而不是$v$的扩展,也即$\nabla_S$是一个内蕴算子.
-\newpage
+
 类似地,对于一个向量场$\boldsymbol{v}\in(C^1(S))^3$,我们也可以把它扩展到$(C^1(U))^3$上去,并定义$\boldsymbol{v}$在$S$上的切向散度为
 \begin{equation*}
 \nabla_S\cdot\boldsymbol{v}=\nabla\cdot\boldsymbol{v}-\boldsymbol{n}^t\nabla\boldsymbol{v}\boldsymbol{n}\in\mathbb{R}
@@ -51,6 +127,11 @@ $\mathcal{P}_0:U\rightarrow S$:
 \end{equation*}
 其中$v\in C^2(S)$,$\nabla^2v$是$v$的Hessian矩阵(扩展为$C^2(U)$函数)
 \subsection{离散的曲面$S_h$和网格$\mathcal{T}_h$}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/picture_1.png}
+\caption{}
+\end{figure}
 记$S_h\subset U$是由三角形单元$\tau_h$组成的多面体面,即$S_h$逼近曲面$S$,我们假设$S_h$的这些三角形单元是正则的,单元尺寸是拟一致的,且它们的顶点都在曲面$S$上.其中$\mathcal{N}_h=\left\{x_i\right\}$为$S_h$所有顶点的集合,$\mathcal{T}_h=\left\{\tau_h\right\}$ 为所有三角形单元的集合,$\mathcal{E}_h=\left\{E\right\}$为所有边的集合.对于任意的$\tau_h\in\mathcal{T}_h$,记$\boldsymbol{n}_h$为$S_h$在$\tau_h$上的单位外法向向量.对于$v_h\in C(S_h)$和$v_h|_{\tau_h}$,我们有
 \begin{equation*}
 \nabla_{S_h}v_h|_{\tau_h}:=\nabla v_h-(\nabla v_h\cdot\boldsymbol{n}_h)\boldsymbol{n}_h=(\boldsymbol{I}-\boldsymbol{n}_h\boldsymbol{n}^t_h)\nabla v_h=\boldsymbol{P}_h\nabla v_h\in\mathbb{R}^3
@@ -67,8 +148,6 @@ $\mathcal{P}_0:U\rightarrow S$:
 \begin{equation*}
 \nabla_{S}\tilde{v}_h(x)=(\boldsymbol{I}-d\boldsymbol{H})^{-1}\left(\boldsymbol{I}-\frac{\boldsymbol{n}_h\boldsymbol{n}^t}{\boldsymbol{n}^t\boldsymbol{n}_h}\right)\nabla_{S_h}v_h(\mathcal{P}^{-1}_0(x))\quad\forall x\in\tau.
 \end{equation*}
-
-\newpage
 
 \section{曲面线性有限元}
 
@@ -92,7 +171,7 @@ $u_{h}\in \mathcal V_h$, 满足$\int_{S_{h}}u_{h}\,\mathrm{d}\sigma_{h}=0$
 \begin{equation*}
 \int_{S_h}\nabla_{S_h}u_h\cdot\nabla_{S_h}v_h\mathrm{d}\sigma_h=\int_{S_h}f_hv_h\mathrm{d}\sigma_h\quad\forall v_h\in\mathcal{V}_h
 \end{equation*}
-\newpage
+
 \section{曲面高次元}
 \subsection{符号说明}
 \begin{table}[H]
