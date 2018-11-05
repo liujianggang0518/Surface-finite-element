@@ -109,7 +109,6 @@ $\mathcal{P}_0:U\rightarrow S$:
 \begin{equation*}
 \mathcal{P}_0(x):=x-d(x)\boldsymbol{n}(x)\quad(1)
 \end{equation*}
-
 对于$v\in C^1(S)$,因为$S$是$C^3$的,我们可以把$v$扩展到$C^1(U)$,且仍记为$v$.定义$v$在$S$上的切向梯度为
 \begin{equation*}
 \nabla_Sv=\nabla v-(\nabla v\cdot\boldsymbol{n})\boldsymbol{n}=(I-\boldsymbol{n}\boldsymbol{n}^t)\nabla v=\boldsymbol{P}\nabla v\in\mathbb{R}^3
@@ -389,18 +388,384 @@ g_{12} & g_{22}
 \end{equation*}
 \begin{equation*}
 \begin{pmatrix}
-\hat w_u \\ \hat w_v
+1\hat w_u \\ \hat w_v
 \end{pmatrix}
 = (\frac{\partial \mathbf x_S}{\partial \mathbf u})^T \nabla_{\mathbf x_S} w(x_S)
 \end{equation*}
+\newpage
+\section{自洽场模型及其数值算法}
+\subsection{1.平均场理论}
+平均场理论是一种处理多体问题的重要方法，它的基本出发点是用一个“平均了的场”来近似代替多体系统中某个特定个体受到的作用，从而把复杂的多体问题近似地转化为单体问题。
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_21.png}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_22.png}
+\end{figure}
+自洽场模型是基于平均场近似的粗粒化模型，特别适合研究发生相分离的非均相高分子体系在平衡态的相结构及相图。
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_23.png}
+\end{figure}
+\subsection{2.共聚物及分类}
+共聚物：由两种或更多单体发生聚合反应所形成的聚合物称为共聚物，与之对应的是只有一种单体聚合而成的均聚物。共聚物的结构中具有至少两种结构单元，结构单元之间以化学键连接。由于共聚物包含至少两种结构单元，它可以根据其结构单元的排列顺序分成四种共聚物，图 2给出了当结构单元为A和B时的情况：依次为均聚物、交替共聚物、无规共聚物、嵌段共聚物和接枝共聚物。
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_25.png}
+\caption{}
+\end{figure}
+\begin{itemize}
+\item 交替共聚物：共聚物中两结构单元A和B严格交替相间，两者在共聚物中的摩尔分数均约为$50\%$
+\item 无规共聚物：共聚物中两结构单元A和B随机出现，其中A和B自身连续的单元数不多，一般在几个到十几个。从统计上看，无规共聚物的某结构单元在聚合链上一段的含量等于其在整个聚合物中的含量。
+\item 嵌段共聚物：由较长的只有结构单元A的链段和较长的只有结构单元B的链段构成，其中每一链段可达到几百到几千结构单元。
+\item 接枝共聚物：接枝共聚物在结构上属于支化聚合物，其不仅有主链，还有较长的支链，且主链和支链是由不同种结构单元组成，如上图，主链全部是结构单元A，而支链全部是结构单元B。有时候，接枝聚合物的主链和支链可能都是共聚物，比如主链是A和B的无规共聚物，支链是A和B的交替共聚物，整体仍然是接枝共聚物。
+\end{itemize}
+\subsection{3.相分离}
+嵌段聚合物在一定温度下会发生相分离现象，但一般的相分离体系如水和油，油滴的尺寸在微米尺度，而嵌段聚合物的嵌段间有化学键的链接，形成的相结构只有几十到几百纳米，所以被称为微相分离。嵌段共聚物的相转变温度主要取决于几个参数，总聚合物$N$，拓扑结构参数$n$,某嵌段所占的体积分数$f$和嵌段之间的Flory-Huggins相互作用参数$\chi$。随着嵌段所占的体积分数不同，嵌段聚合物相分离后形成的相结构也不同，有球状相，六方柱状相，层状相和双连续回转状相等结构。
+\subsection{4.两嵌段柔性链共聚物体系}
+首先给出两嵌段共聚物体系的连续高分子链的模型
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/dblock.pdf}
+\caption{}
+\end{figure}
+我们考虑一般曲面上的两嵌段共聚物体系，假设系统有$n$个共聚物分子,每个共聚物分子是由$A$和$B$两类单体构成的两嵌段共聚物,它们限制在总面积为$S$的曲面上.单体$A$、$B$的体积分数分别为$f$和$1-f$,在平均场理论下，该系统的哈密顿量是
+\begin{equation*}
+H[w_+,w_-]=\frac{1}{\left|S\right|}\int\mathrm{d}x\left\{-w_+(x)+\frac{w_-^2(x)}{\chi N}\right\}-logQ[w_+(x),w_-(x)]\quad(1)
+\end{equation*}
+方程(1)中$w_-(x)$和$w_+(x)$是对应系统的场函数，其中$x$表示空间曲面上的点,$Q$是单链配分函数,$S$是曲面的面积,$\chi N$是体系参数,其中$\chi$是相互作用参数,$N$是聚合度.自由能函数关于场的一阶变分推导出下面的自洽场方程
+\begin{equation*}
+\begin{aligned}
+\frac{\delta H}{\delta w_+(x)}&=\phi_A(x)+\phi_B(x)-1=0\\
+\frac{\delta H}{\delta w_-(x)}&=\frac{2w_-(x)}{\chi N}-[\phi_A(x)-\phi_B(x)]=0
+\end{aligned}
+\end{equation*}
+其中$\phi_A(x)$和$\phi_B(x)$是单体$A$和单体$B$的密度函数.然后结合连续高分子链的模型，得到自洽场系统.
+\begin{equation*}
+\begin{aligned}
+\frac{\partial}{\partial s}q(x,s)&=\nabla_S^2q(x,s)-w(x,s)q(x,s),\quad q(x,0)=1\quad(2)\\
+\frac{\partial}{\partial s}q^{\dagger}(x,s)&=-\nabla_S^2q^{\dagger}(x,s)+w(x,s)q^{\dagger}(x,s),\quad q^{\dagger}(x,1)=1\quad(3)\\
+&w(x,s)=
+\begin{cases}
+w_+(x) - w_-(x) & 0\le s\le f\\
+w_+(x) + w_-(x) & f\le s\le 1
+\end{cases}
+\end{aligned}
+\end{equation*}
+\begin{equation*}
+\begin{aligned}
+&Q=\frac{1}{\left|S\right|}\int\mathrm{d}xq(x,s)q^{\dagger}(x,1-s),\quad\forall s\in[0,1]\quad(4)\\
+&\phi_A(x)=\frac{1}{Q}\int_0^f\mathrm{d}sq(x,s)q^{\dagger}(x,1-s)\quad(5)\\
+&\phi_B(x)=\frac{1}{Q}\int_f^1\mathrm{d}sq(x,s)q^{\dagger}(x,1-s)\quad(6)
+\end{aligned}
+\end{equation*}
+在系统中,正向传播子$q(x,s)(s:0\rightarrow 1)$表示长度为$s$的链在空间曲面位置$x$处的概率密度分布函数,其中变量$s$用于参数化每条共聚物链,$s=0$表示单体$A$的起始位置,$s=f$是单体$A$和单体$B$之间的连接点,反向传播子$q^{\dagger}(x,s)(s:1\rightarrow 0)$表示长度为$s$的链在空间曲面位置$x$处的概率密度分布函数.
+\subsection{5.PDE Solver}
+这里只给出正向传播子方程(2)的离散化，反向传播子方程(3)可以类似的得出.首先，给出(2)的变分形式
+对$q\in H^1(S)$,满足
+\begin{equation*}
+\left(\frac{\partial}{\partial s}q,v\right)_S=-(\nabla_Sq,\nabla v)_S-(wq,v)_S,~~\text{ for all } v\in H^1(S).
+\end{equation*}
+其中$(\cdot,\cdot)_S$表示在曲面$S$上$L^2$内积.
 
+找到$V_h\subset H^1(S)$得到(2)线性曲面有限元的离散形式,对$q_h=\sum\limits_{i=1}^Nq_i(s)\varphi_i(x)$,满足
+\begin{equation*}
+\left(\frac{\partial}{\partial s}q_h,v_h\right)_{S_h}=-(\nabla_{S_h}q_h,\nabla_{S_h} v_h)_{S_h}-(w_hq_h,v_h)_{S_h},~~\text{ for all } v_h\in H^1(S)\quad(4).
+\end{equation*}
 
+其中$(\cdot,\cdot)_{S_h}$表示在曲面$S_h$上$L^2$内积.$w_h(x,s)=\sum\limits_{i=1}^Nw(x_i,s)\varphi_i(x)$是$w(x,s)$的线性插值.得到方程(4)的半离散矩阵形式
+\begin{equation*}
+M\frac{\partial}{\partial s}\boldsymbol{q}(s)=-(A+F)\boldsymbol{q}(s)\quad(5)
+\end{equation*}
 
+其中
+\begin{equation*}
+\boldsymbol{q}(s)=(q_1(s),q_2(s),\cdots,q_N(s))^T
+\end{equation*}
 
+且
+\begin{equation*}
+M_{i,j}=(\varphi_i,\varphi_j),\quad A_{i,j}=(\nabla_S\varphi_i,\nabla_S\varphi_j),\quad F_{i,j}=(w_h\varphi_i,\varphi_j)
+\end{equation*}
 
+接下来，在$s-$方向使用Crank-Nicolson格式
+\begin{equation*}
+M\frac{\boldsymbol{q}^{n+1}-\boldsymbol{q}^n}{ds}=-\frac{1}{2}(A+F)\left[\boldsymbol{q}^{n+1}+\boldsymbol{q}^n\right]
+\end{equation*}
+$ds$是时间步长，整理得全离散的矩阵形式为
+\begin{equation*}
+\left[M+\frac{ds}{2}(A+F)\right]\boldsymbol{q}^{n+1}=\left[-\frac{ds}{2}(A+F)+M\right]\boldsymbol{q}^n
+\end{equation*}
 
+$s-$方向上的积分格式
+\begin{equation*}
+\int_0^{n_s}\mathrm{d}tf(s)=\Delta s\left\{-\frac{5}{8}(f_0+f_{n_s})+\frac{1}{6}(f_1+f_{{n_s}-1})-\frac{1}{24}(f_2+f_{{n_s}-2})+\sum\limits_{j=0}^{n_s}f_j\right\}
+\end{equation*}
+\subsection{6.自洽场迭代}
+这里我们采用梯度下降法达到鞍点,具体而言，我们引入虚拟时间$t$并且在每个时间步,我们给出相应的鞍点搜索表达式
+\begin{equation*}
+\begin{aligned}
+&\frac{\partial}{\partial t}w_+(x,t)=\frac{\delta H[w_+,w_-]}{\delta w_+(x,t)}\quad(7)\\
+&\frac{\partial}{\partial t}w_-(x,t)=\frac{\delta H[w_+,w_-]}{\delta w_-(x,t)}\quad(8)
+\end{aligned}
+\end{equation*}
+显然,当(2)和(3)达到平衡态时满足(7)和(8)
 
+寻找SCFT的鞍点需要迭代方法,在SCFT的标准框架下,我们通过如下的迭代方案来更新$w_+(x), w_-(x)$.
 
+step 1 给定初始估计的场$w_+(x), w_-(x)$.
+
+step 2 计算在一般曲面上的正向传播子$q(x,s)$和反向传播子$q^{\dagger}(x,s)$.
+
+step 3 由计算的$q(x,s)$和$q^{\dagger}(x,s)$通过自洽场系统得到$Q$,$\phi_A(x)$和$\phi_B(x)$,并计算出哈密顿量$H$.
+
+step 4 对(2)和(3)使用迭代方法更新场$w_+(x,t)$和$w_-(x,t)$.
+
+step 5 重复步骤 2-4 ,直到达到收敛标准.
+\newpage
+\section{自适应网格加密}
+\subsection{1.网格数据结构}
+以一个三角形网格为例，如下图
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/picture_2.png}
+\caption{}
+\end{figure}
+\begin{enumerate}
+\item 边数组 `edge`
+\begin{enumerate}
+    \item 二维 $NE\times 2$ 数组 
+    \item `edge[i, 0]` 和 `edge[i, 1]` 分别存储第 $i$ 条边的起点和终点的全局编号
+    \item 如果第 $i$ 条边是边界边, 则规定从 `edge[i, 0]` 看向 `edge[i, 1]`, 网格区域一定在左手边
+\end{enumerate}
+\begin{lstlisting}
+array([[0, 1],
+       [2, 0],
+       [3, 0],
+       [1, 2],
+       [2, 3])
+\end{lstlisting}
+\item 边与单元的相邻关系数组 `edge2cell`
+\begin{enumerate}
+    \item 二维 $NE \times 4 $ 的数组
+    \item `edge2cell[i, 0]` 和 `edge2cell[i, 1]` 分别存储第 $i$ 条边左右两个单元的全局编号
+\newpage
+    \item `edge2cell[i, 2]` 和 `edge2cell[i, 3]` 分别存储第 $i$ 条边在左右两个单元中的局部编号
+    \item 如果是边界边, 则
+\begin{enumerate}
+        \item `edge2cell[i, 0] = edge2cell[i, 1]` 
+        \item `edge2cell[i, 2] = edge2cell[i, 3]`
+\end{enumerate}
+\end{enumerate}
+\begin{lstlisting}
+array([[0, 0, 1, 1],
+       [0, 1, 0, 0],
+       [1, 1, 2, 2],
+       [0, 0, 2, 2],
+       [1, 1, 1, 1],)
+\end{lstlisting}
+\item 单元与单元的相邻关系数组`cell2cell`
+\begin{enumerate}
+  \item 二维 $NE \times 3$ 的数组
+  \item `cell2cell[i, 0]` 和 `cell2cell[i, 1]` 和 `cell2cell[i, 2]`分别存储第 $i$ 个单元的邻居单元的全局编号,如果没有邻居单元,邻居单元的全局编号就是这个单元的全局编号.
+  
+\end{enumerate}
+\begin{lstlisting}
+array([[1, 0, 0],
+       [0, 1, 1]])
+\end{lstlisting}
+\item 单元与边的关系`cell2edge`
+\begin{enumerate}
+\item 二维 $NC \times 3$ 的数组
+\item `cell2edge[i, 0:3]`是存储第`i`个单元的逆时针对应边的全局编号
+\end{enumerate}
+\begin{lstlisting}
+array([[ 1,  0,  3],
+       [ 1,  4,  2]])
+\end{lstlisting}
+\end{enumerate}
+\subsection{2.约定}
+\begin{figure}[H]
+\centering
+\begin{minipage}[!htbp]{0.3\linewidth}
+    \centerline{\includegraphics[width=6cm]{./figures/Figure_3.png}}
+    \centerline{加密前}
+\end{minipage}
+\hspace{0.25in}		
+\begin{minipage}[!htbp]{0.3\linewidth}
+    \centerline{\includegraphics[width=6cm]{./figures/Figure_2.png}}
+    \centerline{加密后}
+\end{minipage}
+\end{figure}
+我们的加密方式是取三角形三条边的中点，然后把三条边的中点连起来，这样就把原来的三角形分成了四个小三角形，我们约定四个小三角形的局部编号顺序为0, 1, 2, 3.然后约定局部编号为3的三角形的顶点的局部编号的顺序和他父单元边的局部编号顺序一致.
+\subsection{3.Tritree的数据结构}
+\begin{enumerate}
+\item 生成Tritree类的时候, 是从`TriangleMesh`中继承网格
+\item 定义初始化时,需要继承的是网格点`node`, 单元`cell`, 根据`node`和`cell`初始化网格, 然后得到单元的个数`NC`,　再根据单元的个数生成两个数组`parent`和`child`, 这两个数组分别是值为 $-1$ 的 $NC \times 2$ 和 $NC \times 4$ 的数组
+\item 定义叶子单元指标(即`leaf\_cell\_index`): 根据数组`child`的值为 $-1$ 的所有行维度的索引值`idx`, 返回叶子单元的`idx`.
+\item 定义叶子单元(即`is\_leaf\_cell`): 是根据叶子单元指标`idx`来判断是否是叶子单元:若`idx`是`None`, 返回的是`child[:, 0]==-1`, 是布尔型数组, 表示的意思是第 $0$ 列的所有行的值等于 $-1$ 为真;若`idx`不是`None`则返回的是`child[idx, 0] == -1`, 是布尔型数组, 表示的意思是第 $0$ 列的所有对应`idx`的值等于 $-1$ 为真
+\item 定义根单元(即`is\_root\_cell`): 是根据单元指标`idx`来判断是否是根单元: 若`idx`是`None`, 返回的是`parent[:, 0]==-1`, 是布尔型数组, 表示的意思是第 $0$ 列的所有行的值等于 $-1$ 为真; 若`idx`不是`None`则返回的是`parent[idx, 0] == -1`, 是布尔型数组, 表示的意思是第 $0$ 列的所有对应`idx`的值等于 $-1$ 为真
+\end{enumerate}
+\subsection{4.加密算法}
+\begin{enumerate}
+\item 定义加密(即`refine`): 传入的数据是标记`marker`(标记是自适应加密过程中必不可少的一步,　它构成自适应加密循环的过程,自适应加密过程为: 求解 $\to$ 估计 $\to$ 标记 $\to$ 加密或放粗). 对于传入的数据`marker`若`marker == None`为真, 指标的索引`idx`就是叶子单元的索引, 否则, 叶子单元指标`idx`就是标记之后的索引. 若`idx`是`None`则返回`False`, 加密结束, 
+如果`idx`的长度大于 $0$, 则进行如下,我们定义`isMarkedCell`是长度为`NC`的布尔型数组,然后把`isMarkedCell`索引中`idx`是叶子单元的等于`True`.
+\item 扩展标记单元
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_8.png}
+\caption{}
+\end{figure}
+case 1：如图 5,如果这个单元是叶子单元但不是被标记的单元,但是这个单元的邻居单元至少有两个以上的单元是被标记的单元或者不是叶子单元,那么这个单元也应该被标记.
+\begin{figure}[H]
+\centering
+\begin{minipage}[!htbp]{0.3\linewidth}
+    \centerline{\includegraphics[width=6cm]{./figures/Figure_4.png}}
+    \centerline{(a)}
+\end{minipage}
+\hspace{0.25in}		
+\begin{minipage}[!htbp]{0.3\linewidth}
+    \centerline{\includegraphics[width=6cm]{./figures/Figure_5.png}}
+    \centerline{(b)}
+\end{minipage}
+\caption{}
+\end{figure}
+case 2:如图 6(a)它的左边单元是叶子单元但不是被标记的单元,右边单元不是叶子单元,但是右边单元中与左边单元相邻的孩子单元是被标记的单元,那么左边单元也应该被标记.\\
+如图 6(b)它的右边单元是叶子单元但不是被标记的单元,左边单元不是叶子单元,但是左边单元中与右边单元相邻的孩子单元是被标记的单元,那么右边单元也应该被标记.\\
+扩展单元的时候我们找到是上面两种情况的叶子单元,把`isMarkedCell`索引中`idx`是上面两种情况的叶子单元的等于`True`,现在我们就找到了所有要被加密的单元.
+\item 找到加密的边和`edge2newNode`\\
+我们定义`refineFalg`是长度为`NE`的布尔型数组,通过`cell2edge`找到`isMarkedCell`的边,然后把`refineFalg`中索引是这些边的等于`True`,但是这里要除去左边是叶子单元,右边不是叶子单元或者左边不是叶子单元边,右边是叶子单元的那些边,在`refineFalg`索引是这些边的等于`False`,要加密边的总数为`NNN=refineFalg.sum()`.\\
+`edge2newNode`是长度为`NE`的数组,加密之后边上的新的点的编号为`NN+np.arange(NNN)`.
+\item 加密成四个小三角形\\
+首先`NCC`是标记单元的个数,　再根据标记单元的个数生成`cell4`是值为0的`4*NC`$\times$3数组和`parent4`,`child4`分别是值为 $-1$ 的`4*NC`$\times$2 和`4*NC`$\times$4的数组,然后找到一分为四的每个小三角形的顶点,然后把连起来,最后把所有的`node`,`cell`,`parent`,`child`拼到一起.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_2.png}
+\caption{}
+\end{figure}
+\begin{lstlisting}
+cell4[:NCC, 0] = cell[isMarkedCell, 0] 
+cell4[:NCC, 1] = edge2newNode[cell2edge[isMarkedCell, 2]] 
+cell4[:NCC, 2] = edge2newNode[cell2edge[isMarkedCell, 1]] 
+parent4[:NCC, 0] = idx 
+parent4[:NCC, 1] = 0
+self.child[idx, 0] = NC + np.arange(0, NCC)
+\end{lstlisting}
+\item 生成协调化网格
+\begin{figure}[H]
+\centering
+\begin{minipage}[!htbp]{0.3\linewidth}
+    \centerline{\includegraphics[width=6cm]{./figures/Figure_9.png}}
+    \centerline{协调化之前}
+\end{minipage}
+\hspace{0.25in}		
+\begin{minipage}[!htbp]{0.3\linewidth}
+    \centerline{\includegraphics[width=6cm]{./figures/Figure_7.png}}
+    \centerline{协调化之后}
+\end{minipage}
+\end{figure}
+最后我们进行协调化处理,找到每条加密边的中点和对应单元的顶点把它们连在一起,这里要注意最后的`cell`的处理.\\
+然后调用`TriangleMesh(node, cell)`,生成协调化网格`Tmesh`.
+\end{enumerate}
+例子1：加密圆穿过的单元
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_12.png}
+\caption{}
+\end{figure}
+例子2：球面上的加密
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_11.png}
+\caption{}
+\end{figure}
+\newpage
+\section{自适应有限元方法}
+\subsection{1.预备知识}
+由有限元方法的先验误差估计知，虽然求得了数值解，但不能知道误差的具体大小，特别是当解具有奇性的时候，要得到好的数值解要求网格尺寸$h$足够小，这是不现实的。自适应有限元方法(AFEM)是求解科学计算和工程问题的最有效方法之一，特别对存在奇性或者多尺度性质的问题有很强的适定性。它根据计算结果和已知量自动控制计算的过程，逐步调整网格，使得误差分布得比较均匀，从而以尽量少的计算量达到所要求的精度，提高计算效率。自适应方法的研究对象是连续的微分或者积分方程，其基本算法包含两步：当前离散空间上的求解和调整后的离散空间上的校正。自适应算法奏效的基本条件是：后验误差估计子的可靠性和有效性，调整后的离散空间能够捕捉到足够的局部高频信息。后验误差估计子是基于近似解和其他已知条件的一个可计算量，它既是真实误差的一个上界又是真实误差的一个下界。后验误差估计子是调整离散空间的基础。调整离散空间是自适应方法至关重要的部分，目前科学工程计算中调整离散空间的方法有h-方法、p-方法、hp-方法和r-方法。h-方法是一种局部网格加密方法，它保持单元多项式次数不变，通过逐步加密网格来调整离散空间，和h-方法不同，p-方法保持网格不变，通过提高单元多项式次数来调整离散空间。hp-方法是h-和p-方法的结合，即在加密网格的同时改变单元多项式的次数。r-方法是在不改变节点总数和多项式次数的前提下通过移动节点来调整离散空间。
+
+自适应有限元算法流程图见图 10，由下面的几步操作构成：
+\begin{center}
+求解$\rightarrow$误差估计$\rightarrow$标记$\rightarrow$加密
+\end{center}
+\begin{itemize} 
+\item 求解：在当前网格上求得数值解$u_h$;包括计算刚度矩阵和载荷向量，求解代数方程组.
+\item 误差估计：根据后验误差估计，由已知数据和数值解$u_h$估计单元误差和全局误差.
+\item 标记：根据标记策略和计算的单元误差，对网格中需要加密的单元进行标记.
+\item 加密：依据加密算法，对标记的单元进行加密，得到新网格.
+\end{itemize}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{./figures/Figure_13.png}
+\caption{}
+\end{figure}
+\subsection{2.后验误差估计}
+后验误差估计是自适应有限元方法中重要的一部分，它是根据数值解和已知数据构造单元估计子$\{\eta_{\tau}:\tau\in\mathcal{T}_h\}$和全局估计子$\eta_h^2=\sum\limits_{\tau\in\mathcal{T}_h}\eta_{\tau}^2$,来局部和全局的估计误差$e_h=u-u_h$.一个好的后验误差估计既是误差的下界也是误差的上界，即
+\begin{equation*}
+C_1\eta_h\le\left\|\left|e_h\right|\right\|\le C_2\eta_h
+\end{equation*}
+上界保证了计算结果的准确性，下界则保证了计算结果的有效性。特别地，$\frac{\eta_h}{\left\|\left|e_h\right|\right\|}\rightarrow 1$,则称后验误差估计是渐进准确的。$\eta_h$用来控制自适应算法的终止，单元误差估计子则表现了误差的分布情况。
+
+后验误差估计主要可归为两类：残量型后验误差估计和重构型后验误差估计。残量型后验误差估计是通过计算局部残量而得到误差估计。对残量的估计方式可分为显式法和隐式法，导出的后验误差估计分别称为显式后验误差估计和隐式后验误差估计。重构型误差估计具有与问题(方程)无关、与有限元形式无关等优点，且实现简单、计算量小、具有鲁棒性(是指控制系统在一定（结构，大小）的参数摄动下，维持其它某些性能的特性)。重构型后验误差估计是基于后处理技术的误差估计，后处理是在得到数值解后，通过少量的计算，来改善有限元解的质量。常用的后处理的方法有：加权平均、插值后处理、最小二乘法、局部或全局投影等。用后处理的解代替真解，它可用来估计真实误差。
+\subsection{3.基于WAR的后验误差估计}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_24.png}
+\caption{}
+\end{figure}
+首先我们给出三角形单元的五种加权平均格式的定义。记$\mathcal{T}_h$为区域$\Omega\subset\mathbb{R}^2$的三角剖分，$S_h$为$\mathcal{T}_h$上对应的线性元空间
+\begin{equation*}
+S_h=\{v\in H^1(\Omega):v \in P_1(\tau),\forall\tau\in\mathcal{T}_h\}
+\end{equation*}
+其中$P_k(D)$表示$D\in\mathbb{R}^2$上次数不超过$k$次的多项式集合。对任一内节点$z$，记$\mathcal{K}_z$为点$z$的单元片。如图 11，设$\tau_1,\tau_2,\cdots,\tau_m\in \mathcal{T}_h$为单元片$\mathcal{K}_z$中的单元，记$c_i$为单元$\tau_i$的重心，$S_i$为单元$\tau_i$的面积，$d_i=\left\|z-c_i\right\|$表示点$z$与$c_i$的距离，$\alpha_i$为三角形$\tau_i$中以$z$顶点的角的角度。对有限元函数$v\in S_h$,定义加权平均格式如下：
+
+简单平均：
+\begin{equation*}
+S_hv(z):=\sum\limits_{i=1}^m\frac{1}{m}\nabla v\big|_{\tau_i}
+\end{equation*}
+
+面积平均
+\begin{equation*}
+G_hv(z):=\sum\limits_{i=1}^m\frac{S_i}{\sum\limits_{j=1}^mS_j}\nabla v\big|_{\tau_i}
+\end{equation*}
+
+面积调和平均
+\begin{equation*}
+H_hv(z):=\sum\limits_{i=1}^m\frac{\frac{1}{S_i}}{\sum\limits_{j=1}^m\frac{1}{S_j}}\nabla v\big|_{\tau_i}
+\end{equation*}
+
+角度平均
+\begin{equation*}
+A_hv(z):=\sum\limits_{i=1}^m\frac{\alpha_i}{\sum\limits_{j=1}^m\alpha_j}\nabla v\big|_{\tau_i}
+\end{equation*}
+
+距离调和平均
+\begin{equation*}
+D_hv(z):=\sum\limits_{i=1}^m\frac{\frac{1}{d_i}}{\sum\limits_{j=1}^m\frac{1}{d_j}}\nabla v\big|_{\tau_i}
+\end{equation*}
+
+上面我们讨论了梯度重构的加权平均方法，加权平均方法是一种简单的后处理方法，基于加权平均方法可以获得有效的后验误差估计，因此在自适应方法中被广泛的应用。基于加权平均方法的后验误差估计具有如下形式：
+\begin{equation*}
+\eta_a=\left\|R_hu_h-\nabla u_h\right\|_{0,\Omega},\quad R_hu_h(z)=\sum\limits_{j=1}^{m}\nabla u_h(z_j)\omega_j
+\end{equation*}
+其中，$R_h$表示加权平均算子，$z_j$为样本点，$z$为重构点，$\omega_j$为权函数。我们考虑基于前面讨论的加权平均方法的后验误差估计。记$S_h,G_h,H_h,A_h,D_h$分别表示简单平均算子、面积平均算子、面积调和平均算子、角度平均算子和距离调和平均算子，我们记
+\begin{equation*}
+\eta_{S,\tau}^2=\left\|S_hu_h-\nabla u_h\right\|_{0,\tau}^2,\qquad\eta_S^2=\sum\limits_{\tau\in\mathcal{T}_h}\eta_{S,\tau}^2
+\end{equation*}
+\begin{equation*}
+\eta_{G,\tau}^2=\left\|G_hu_h-\nabla u_h\right\|_{0,\tau}^2,\qquad\eta_G^2=\sum\limits_{\tau\in\mathcal{T}_h}\eta_{G,\tau}^2
+\end{equation*}
+\begin{equation*}
+\eta_{H,\tau}^2=\left\|H_hu_h-\nabla u_h\right\|_{0,\tau}^2,\qquad\eta_H^2=\sum\limits_{\tau\in\mathcal{T}_h}\eta_{H,\tau}^2
+\end{equation*}
+\begin{equation*}
+\eta_{A,\tau}^2=\left\|A_hu_h-\nabla u_h\right\|_{0,\tau}^2,\qquad\eta_A^2=\sum\limits_{\tau\in\mathcal{T}_h}\eta_{A,\tau}^2
+\end{equation*}
+\begin{equation*}
+\eta_{D,\tau}^2=\left\|D_hu_h-\nabla u_h\right\|_{0,\tau}^2,\qquad\eta_D^2=\sum\limits_{\tau\in\mathcal{T}_h}\eta_{D,\tau}^2
+\end{equation*}
 
 
 
