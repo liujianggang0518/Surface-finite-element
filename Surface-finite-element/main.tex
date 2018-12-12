@@ -8,7 +8,7 @@
 \XeTeXlinebreakskip = 16pt plus 16pt 
 \begin{document}
 \title{曲面有限元及其应用}
-\author{刘江刚 \ \ 龚欣}
+\author{刘江刚}
 \date{\today}
 \maketitle
 %\tableofcontents
@@ -124,7 +124,18 @@ $\mathcal{P}_0:U\rightarrow S$:
 \begin{equation*}
 \Delta_Sv=\nabla_S\cdot(\nabla_Sv)=\Delta v-(\nabla v\cdot\boldsymbol{n})(\nabla\cdot\boldsymbol{n})-\boldsymbol{n}^t\nabla^2v\boldsymbol{n}\in\mathbb{R}
 \end{equation*}
-其中$v\in C^2(S)$,$\nabla^2v$是$v$的Hessian矩阵(扩展为$C^2(U)$函数)
+其中$v\in C^2(S)$,$\nabla^2v$是$v$的Hessian矩阵(扩展为$C^2(U)$函数)\\
+推导过程如下：
+\begin{equation*}
+\begin{aligned}
+\Delta_Sv&=\nabla_S\cdot(\nabla_Sv)=\nabla_S\cdot(\nabla v-(\nabla v\cdot\boldsymbol{n})\boldsymbol{n})\\
+&=\nabla_S\cdot(\nabla v)-\nabla_S\cdot[(\nabla v\cdot\boldsymbol{n})\boldsymbol{n}]\\
+&=\nabla\cdot(\nabla v)-\boldsymbol{n}^t\nabla(\nabla v)\boldsymbol{n}-\nabla\cdot[(\nabla v\cdot\boldsymbol{n})\boldsymbol{n}]+\boldsymbol{n}^t\nabla[(\nabla v\cdot\boldsymbol{n})\boldsymbol{n}]\boldsymbol{n}\\
+&=\Delta v-\boldsymbol{n}^t\nabla^2v\boldsymbol{n}-(\nabla v\cdot\boldsymbol{n})(\nabla\cdot\boldsymbol{n})-\nabla(\nabla v\cdot\boldsymbol{n})\boldsymbol{n}+\boldsymbol{n}^t[(\nabla v\cdot\boldsymbol{n})\nabla\boldsymbol{n}+\boldsymbol{n}\nabla(\nabla v\boldsymbol{n})^T]\boldsymbol{n}\\
+&=\Delta v-\boldsymbol{n}^t\nabla^2v\boldsymbol{n}-(\nabla v\cdot\boldsymbol{n})(\nabla\cdot\boldsymbol{n})-\nabla(\nabla\cdot\boldsymbol{n})\boldsymbol{n}+\boldsymbol{n}^t(\nabla v\cdot\boldsymbol{n})\nabla\boldsymbol{n}\cdot\boldsymbol{n}+\nabla(\nabla\cdot\boldsymbol{n})\boldsymbol{n}\\
+&=\Delta v-(\nabla v\cdot\boldsymbol{n})(\nabla\cdot\boldsymbol{n})-\boldsymbol{n}^t\nabla^2v\boldsymbol{n}
+\end{aligned}
+\end{equation*}
 \subsection{离散的曲面$S_h$和网格$\mathcal{T}_h$}
 \begin{figure}[H]
 \centering
@@ -142,12 +153,51 @@ $\mathcal{P}_0:U\rightarrow S$:
 下面我们建立定义在$S$和$S_h$函数之间的关系.借助双射投影$\mathcal{P}_0$,可以由函数$v:S\rightarrow\mathbb{R}$唯一地引入另一个函数$\bar{v}:S_h\rightarrow\mathbb{R}$.对于所有的$x\in S_h$,有$\bar{v}(x)=v(\mathcal{P}_0(x))$.对于任意的$\tau_h\in\mathcal{T}_h$和函数$v\in C^1(\mathcal{P}_0(\tau_h))$,我们有
 \begin{equation*}
 \nabla_{S_h}\bar{v}(x)=(\boldsymbol{P}_h(\boldsymbol{I}-d\boldsymbol{H})\boldsymbol{P})(x)\nabla_{S}v(\mathcal{P}_0(x))\quad\forall x\in \tau_h.
+\end{equation*}\\
+推导过程如下：
+\begin{equation*}
+\begin{aligned}
+\nabla v(x)= &\nabla v(\mathcal{P}_0(x))=[x-d(x)\boldsymbol{n}(x)]'\nabla v(\mathcal{P}_0(x))\\
+=&[(\boldsymbol{P}-d\boldsymbol{H})(x)]\nabla v(\mathcal{P}_0(x))
+\end{aligned}
+\end{equation*}
+由$\boldsymbol{n}\cdot\boldsymbol{n}\equiv 1$，两边求导得：$\boldsymbol{n}\boldsymbol{H}=\boldsymbol{H}\boldsymbol{n}=0$和$\boldsymbol{P}\boldsymbol{H}=\boldsymbol{H}\boldsymbol{P}=\boldsymbol{H}$\\
+所以
+\begin{equation*}
+\begin{aligned}
+\nabla v(x)&=[(\boldsymbol{I}-d\boldsymbol{H})(x)][\boldsymbol{P}(x)]\nabla v(\mathcal{P}_0(x))\\
+&=[(\boldsymbol{I}-d\boldsymbol{H})(x)]\nabla_S v(\mathcal{P}_0(x))
+\end{aligned}
+\end{equation*}
+因此
+\begin{equation*}
+\nabla_{S_h}\bar{v}(x)=\nabla_{S_h}v(\mathcal{P}_0(x))=(\boldsymbol{P}_h(\boldsymbol{I}-d\boldsymbol{H})\boldsymbol{P})(x)\nabla_{S}v(\mathcal{P}_0(x))
 \end{equation*}
 反过来,一个函数$v_h:S_h\rightarrow\mathbb{R}$也可以唯一的引入一个函数$\tilde{v}_h:S\rightarrow\mathbb{R}$,对于所有的$x\in S$,有$\tilde{v}_h(x)=v_h(\mathcal{P}^{-1}_0(x))$.对于任意的$\tau_h\in\mathcal{T}_h$和函数$v_h\in C^1(\tau_h)$让$\tau=\mathcal{P}_0(\tau_h)$,可得
 \begin{equation*}
 \nabla_{S}\tilde{v}_h(x)=(\boldsymbol{I}-d\boldsymbol{H})^{-1}\left(\boldsymbol{I}-\frac{\boldsymbol{n}_h\boldsymbol{n}^t}{\boldsymbol{n}^t\boldsymbol{n}_h}\right)\nabla_{S_h}v_h(\mathcal{P}^{-1}_0(x))\quad\forall x\in\tau.
 \end{equation*}
-
+推导过程如下：\\
+由$\nabla_{S_h}v_h=(\boldsymbol{I}-\boldsymbol{n}_h\boldsymbol{n}_h^t)\nabla v_h=\boldsymbol{P}_h\nabla v_h$，给等式两边同乘以$\boldsymbol{n}$得：
+\begin{equation*}
+\nabla_{S_h}v_h\cdot\boldsymbol{n}=\nabla v_h\cdot\boldsymbol{n}-\boldsymbol{n}_h\cdot\boldsymbol{n}\nabla v_h\cdot\boldsymbol{n}_h
+\end{equation*}
+由于$\nabla v_h\cdot\boldsymbol{n}=0$得：
+\begin{equation*}
+\nabla v_h\cdot\boldsymbol{n}_h=-\frac{\nabla_{S_h}v_h\cdot\boldsymbol{n}}{\boldsymbol{n}_h\cdot\boldsymbol{n}}
+\end{equation*}
+所以
+\begin{equation*}
+\nabla v_h=\left[\boldsymbol{I}-\frac{\boldsymbol{n}_h\cdot\boldsymbol{n}}{\boldsymbol{n}_h\cdot\boldsymbol{n}}\right]\nabla_{S_h}v_h
+\end{equation*}
+又因为
+\begin{equation*}
+\nabla_Sv_h=[\boldsymbol{I}-d\boldsymbol{H}]^{-1}\nabla v_h 
+\end{equation*}
+所以
+\begin{equation*}
+\nabla_{S}\tilde{v}_h(x)=(\boldsymbol{I}-d\boldsymbol{H})^{-1}\left(\boldsymbol{I}-\frac{\boldsymbol{n}_h\boldsymbol{n}^t}{\boldsymbol{n}^t\boldsymbol{n}_h}\right)\nabla_{S_h}v_h(\mathcal{P}^{-1}_0(x))
+\end{equation*}
 \section{曲面线性有限元}
 
 对于三角形$\tau_h\in\mathcal{T}_h$, 记$\{\lambda_i\}$为$\tau_h$的重心坐标.   
@@ -367,7 +417,7 @@ g'_{22} =<\frac{\partial \mathbf x_S}{\partial v}, \frac{\partial \mathbf x_S}{\
 \end{equation*}
 则 $\varphi_{S,i}(\mathbf x_S)$ 在 $\tau_S$ 上的导数定义如下：
 \begin{equation*}
-\nabla_{S_S} \varphi_{S,i} = \frac{\partial \mathbf x_S}{\partial \mathbf u}\begin{bmatrix}
+\nabla_{S} \varphi_{S,i} = \frac{\partial \mathbf x_S}{\partial \mathbf u}\begin{bmatrix}
 g'_{11} & g'_{12}\\
 g'_{12} & g'_{22}
 \end{bmatrix}^{-1}(\frac{\partial \mathbf x}{\partial \mathbf u})^T\nabla_{S_h}\varphi_{i}(\mathbf x) 
@@ -376,7 +426,7 @@ g'_{12} & g'_{22}
 \begin{equation*}
 \hat w(\mathbf x_p) = w(\mathcal P_0(x_p))
 \end{equation*}
-下面讨论如何计算 $\nabla_{S_p} w$. 
+下面讨论如何计算 $\nabla_{S_p}\hat w$. 
 \begin{equation*}
 \nabla_{S_p} \hat w(\mathbf x_p) = \frac{\partial \mathbf x_p}{\partial \mathbf u}\begin{bmatrix}
 g_{11} & g_{12}\\
@@ -388,7 +438,7 @@ g_{12} & g_{22}
 \end{equation*}
 \begin{equation*}
 \begin{pmatrix}
-1\hat w_u \\ \hat w_v
+\hat w_u \\ \hat w_v
 \end{pmatrix}
 = (\frac{\partial \mathbf x_S}{\partial \mathbf u})^T \nabla_{\mathbf x_S} w(x_S)
 \end{equation*}
@@ -410,7 +460,8 @@ g_{12} & g_{22}
 \includegraphics[scale=0.5]{./figures/Figure_23.png}
 \end{figure}
 \subsection{2.共聚物及分类}
-共聚物：由两种或更多单体发生聚合反应所形成的聚合物称为共聚物，与之对应的是只有一种单体聚合而成的均聚物。共聚物的结构中具有至少两种结构单元，结构单元之间以化学键连接。由于共聚物包含至少两种结构单元，它可以根据其结构单元的排列顺序分成四种共聚物，图 2给出了当结构单元为A和B时的情况：依次为均聚物、交替共聚物、无规共聚物、嵌段共聚物和接枝共聚物。
+共聚物\cite{Wikipedia}：由两种或更多单体发生聚合反应所形成的聚合物称为共聚物，与之对应的是只有一种单体聚合而成的均聚物。共聚物的结构中具有至少两种结构单元，结构单元之间以化学键连接。由于共聚物包含至少两种结构单元，它可以根据其结构单元的排列顺序分成四种共聚物，图 2给出了当结构单元为A和B时的情况：依次为均聚物、交替共聚物、无规共聚物、嵌段共聚物和接枝共聚物。
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{./figures/Figure_25.png}
@@ -423,7 +474,7 @@ g_{12} & g_{22}
 \item 接枝共聚物：接枝共聚物在结构上属于支化聚合物，其不仅有主链，还有较长的支链，且主链和支链是由不同种结构单元组成，如上图，主链全部是结构单元A，而支链全部是结构单元B。有时候，接枝聚合物的主链和支链可能都是共聚物，比如主链是A和B的无规共聚物，支链是A和B的交替共聚物，整体仍然是接枝共聚物。
 \end{itemize}
 \subsection{3.相分离}
-嵌段聚合物在一定温度下会发生相分离现象，但一般的相分离体系如水和油，油滴的尺寸在微米尺度，而嵌段聚合物的嵌段间有化学键的链接，形成的相结构只有几十到几百纳米，所以被称为微相分离。嵌段共聚物的相转变温度主要取决于几个参数，总聚合物$N$，拓扑结构参数$n$,某嵌段所占的体积分数$f$和嵌段之间的Flory-Huggins相互作用参数$\chi$。随着嵌段所占的体积分数不同，嵌段聚合物相分离后形成的相结构也不同，有球状相，六方柱状相，层状相和双连续回转状相等结构。
+嵌段聚合物在一定温度下会发生相分离现象，但一般的相分离体系如水和油，油滴的尺寸在微米尺度，而嵌段聚合物的嵌段间有化学键的链接，形成的相结构只有几十到几百纳米，所以被称为微相分离。嵌段共聚物的相转变温度主要取决于几个参数，总聚合物$N$(粗粒化后总的粒子个数)，拓扑结构参数$n$,某嵌段所占的体积分数$f$和嵌段之间的Flory-Huggins相互作用参数$\chi$。随着嵌段所占的体积分数不同，嵌段聚合物相分离后形成的相结构也不同，有球状相，六方柱状相，层状相和双连续回转状相等结构。
 \subsection{4.两嵌段柔性链共聚物体系}
 首先给出两嵌段共聚物体系的连续高分子链的模型
 \begin{figure}[H]
@@ -431,11 +482,11 @@ g_{12} & g_{22}
 \includegraphics[scale=0.5]{./figures/dblock.pdf}
 \caption{}
 \end{figure}
-我们考虑一般曲面上的两嵌段共聚物体系，假设系统有$n$个共聚物分子,每个共聚物分子是由$A$和$B$两类单体构成的两嵌段共聚物,它们限制在总面积为$S$的曲面上.单体$A$、$B$的体积分数分别为$f$和$1-f$,在平均场理论下，该系统的哈密顿量是
+我们考虑一般曲面上的两嵌段共聚物体系，假设系统有$n$个共聚物分子,每个共聚物分子是由$A$和$B$两类单体构成的两嵌段共聚物,它们限制在总面积为$\left|S\right|$的曲面上.单体$A$、$B$的体积分数分别为$f$和$1-f$,在平均场理论下，该系统的哈密顿量是
 \begin{equation*}
 H[w_+,w_-]=\frac{1}{\left|S\right|}\int\mathrm{d}x\left\{-w_+(x)+\frac{w_-^2(x)}{\chi N}\right\}-logQ[w_+(x),w_-(x)]\quad(1)
 \end{equation*}
-方程(1)中$w_-(x)$和$w_+(x)$是对应系统的场函数，其中$x$表示空间曲面上的点,$Q$是单链配分函数,$S$是曲面的面积,$\chi N$是体系参数,其中$\chi$是相互作用参数,$N$是聚合度.自由能函数关于场的一阶变分推导出下面的自洽场方程
+方程(1)中$w_-(x)$和$w_+(x)$是对应系统的压力和对应交换化学势，其中$x$表示空间曲面上的点，$Q$是单链配分函数，$S$是曲面的面积，$\chi N$是体系参数，其中$\chi$是相互作用参数，$N$是聚合度。自由能函数关于场的一阶变分推导出下面的自洽场方程
 \begin{equation*}
 \begin{aligned}
 \frac{\delta H}{\delta w_+(x)}&=\phi_A(x)+\phi_B(x)-1=0\\
@@ -524,6 +575,39 @@ step 3 由计算的$q(x,s)$和$q^{\dagger}(x,s)$通过自洽场系统得到$Q$,$
 step 4 对(2)和(3)使用迭代方法更新场$w_+(x,t)$和$w_-(x,t)$.
 
 step 5 重复步骤 2-4 ,直到达到收敛标准.
+
+7.自适应过程
+
+1.计算参数$\chi N=0.25,f=0.2, r=3.65$,初始的外场在每个网格点的坐标$(x,y,z)$有：
+\begin{equation*}
+w_-=\chi Nsin(5\theta),\quad w_+=0
+\end{equation*}
+其中$\theta=arctan\frac{y}{x}\in[0,2\pi]$
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_50.png}
+\caption{密度函数梯度}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_52.png}
+\caption{密度函数}
+\end{figure}
+1.计算参数$\chi N=0.7,f=0.2, r=3.65$,初始的外场在每个网格点的坐标$(x,y,z)$有：
+\begin{equation*}
+w_-=\chi Nsin(5\theta),\quad w_+=0
+\end{equation*}
+其中$\theta=arctan\frac{y}{x}\in[0,2\pi]$
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_51.png}
+\caption{密度函数梯度}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./figures/Figure_53.png}
+\caption{密度函数}
+\end{figure}
 \newpage
 \section{自适应网格加密}
 \subsection{1.网格数据结构}
@@ -534,11 +618,11 @@ step 5 重复步骤 2-4 ,直到达到收敛标准.
 \caption{}
 \end{figure}
 \begin{enumerate}
-\item 边数组 `edge`
+\item 边数组 edge
 \begin{enumerate}
     \item 二维 $NE\times 2$ 数组 
-    \item `edge[i, 0]` 和 `edge[i, 1]` 分别存储第 $i$ 条边的起点和终点的全局编号
-    \item 如果第 $i$ 条边是边界边, 则规定从 `edge[i, 0]` 看向 `edge[i, 1]`, 网格区域一定在左手边
+    \item edge[i, 0] 和 edge[i, 1] 分别存储第 $i$ 条边的起点和终点的全局编号
+    \item 如果第 $i$ 条边是边界边, 则规定从 edge[i, 0] 看向 edge[i, 1], 网格区域一定在左手边
 \end{enumerate}
 \begin{lstlisting}
 array([[0, 1],
@@ -547,16 +631,16 @@ array([[0, 1],
        [1, 2],
        [2, 3])
 \end{lstlisting}
-\item 边与单元的相邻关系数组 `edge2cell`
+\item 边与单元的相邻关系数组 edge2cell
 \begin{enumerate}
     \item 二维 $NE \times 4 $ 的数组
-    \item `edge2cell[i, 0]` 和 `edge2cell[i, 1]` 分别存储第 $i$ 条边左右两个单元的全局编号
+    \item edge2cell[i, 0] 和 edge2cell[i, 1] 分别存储第 $i$ 条边左右两个单元的全局编号
 \newpage
-    \item `edge2cell[i, 2]` 和 `edge2cell[i, 3]` 分别存储第 $i$ 条边在左右两个单元中的局部编号
+    \item edge2cell[i, 2] 和 edge2cell[i, 3] 分别存储第 $i$ 条边在左右两个单元中的局部编号
     \item 如果是边界边, 则
 \begin{enumerate}
-        \item `edge2cell[i, 0] = edge2cell[i, 1]` 
-        \item `edge2cell[i, 2] = edge2cell[i, 3]`
+        \item edge2cell[i, 0] == edge2cell[i, 1] 
+        \item edge2cell[i, 2] == edge2cell[i, 3]
 \end{enumerate}
 \end{enumerate}
 \begin{lstlisting}
@@ -566,20 +650,20 @@ array([[0, 0, 1, 1],
        [0, 0, 2, 2],
        [1, 1, 1, 1],)
 \end{lstlisting}
-\item 单元与单元的相邻关系数组`cell2cell`
+\item 单元与单元的相邻关系数组 cell2cell
 \begin{enumerate}
   \item 二维 $NE \times 3$ 的数组
-  \item `cell2cell[i, 0]` 和 `cell2cell[i, 1]` 和 `cell2cell[i, 2]`分别存储第 $i$ 个单元的邻居单元的全局编号,如果没有邻居单元,邻居单元的全局编号就是这个单元的全局编号.
+  \item cell2cell[i, 0] 和 cell2cell[i, 1] 和 cell2cell[i, 2]分别存储第 $i$ 个单元的邻居单元的全局编号,如果没有邻居单元,邻居单元的全局编号就是这个单元的全局编号.
   
 \end{enumerate}
 \begin{lstlisting}
 array([[1, 0, 0],
        [0, 1, 1]])
 \end{lstlisting}
-\item 单元与边的关系`cell2edge`
+\item 单元与边的关系 cell2edge
 \begin{enumerate}
 \item 二维 $NC \times 3$ 的数组
-\item `cell2edge[i, 0:3]`是存储第`i`个单元的逆时针对应边的全局编号
+\item cell2edge[i, 0:3] 是存储第$i$个单元的逆时针对应边的全局编号
 \end{enumerate}
 \begin{lstlisting}
 array([[ 1,  0,  3],
@@ -599,19 +683,32 @@ array([[ 1,  0,  3],
     \centerline{加密后}
 \end{minipage}
 \end{figure}
-我们的加密方式是取三角形三条边的中点，然后把三条边的中点连起来，这样就把原来的三角形分成了四个小三角形，我们约定四个小三角形的局部编号顺序为0, 1, 2, 3.然后约定局部编号为3的三角形的顶点的局部编号的顺序和他父单元边的局部编号顺序一致.
+我们的加密方式是取三角形三条边的中点，然后把三条边的中点连起来，这样就把原来的三角形分成了四个小三角形，我们约定四个小三角形的局部编号顺序为0, 1, 2, 3.然后约定局部编号为0的三角形的编号顺序为0，5,4；局部编号为1的三角形的编号顺序为1,3,5；局部编号为2的三角形的编号顺序为2,4,3；局部编号为3的三角形的顶点的局部编号的顺序和他父单元边的局部编号顺序一致.
+\begin{figure}[H]
+\centering
+\begin{minipage}[!htbp]{0.3\linewidth}
+    \centerline{\includegraphics[width=6cm]{./figures/Figure_31.png}}
+    \centerline{协调化前}
+\end{minipage}
+\hspace{0.25in}		
+\begin{minipage}[!htbp]{0.3\linewidth}
+    \centerline{\includegraphics[width=6cm]{./figures/Figure_30.png}}
+    \centerline{协调化后}
+\end{minipage}
+\end{figure}
+我们的协调化方式是将三角形边的中点和这条边对应的顶点连起来，协调化之后就把原来的三角形分成了两个小三角形，我们约定左边为0号单元，右边为1号单元，然后约定0号单元的局部编号顺序为0, 3, 2；1号单元的局部编号顺序为1, 2, 3。
 \subsection{3.Tritree的数据结构}
 \begin{enumerate}
-\item 生成Tritree类的时候, 是从`TriangleMesh`中继承网格
-\item 定义初始化时,需要继承的是网格点`node`, 单元`cell`, 根据`node`和`cell`初始化网格, 然后得到单元的个数`NC`,　再根据单元的个数生成两个数组`parent`和`child`, 这两个数组分别是值为 $-1$ 的 $NC \times 2$ 和 $NC \times 4$ 的数组
-\item 定义叶子单元指标(即`leaf\_cell\_index`): 根据数组`child`的值为 $-1$ 的所有行维度的索引值`idx`, 返回叶子单元的`idx`.
-\item 定义叶子单元(即`is\_leaf\_cell`): 是根据叶子单元指标`idx`来判断是否是叶子单元:若`idx`是`None`, 返回的是`child[:, 0]==-1`, 是布尔型数组, 表示的意思是第 $0$ 列的所有行的值等于 $-1$ 为真;若`idx`不是`None`则返回的是`child[idx, 0] == -1`, 是布尔型数组, 表示的意思是第 $0$ 列的所有对应`idx`的值等于 $-1$ 为真
-\item 定义根单元(即`is\_root\_cell`): 是根据单元指标`idx`来判断是否是根单元: 若`idx`是`None`, 返回的是`parent[:, 0]==-1`, 是布尔型数组, 表示的意思是第 $0$ 列的所有行的值等于 $-1$ 为真; 若`idx`不是`None`则返回的是`parent[idx, 0] == -1`, 是布尔型数组, 表示的意思是第 $0$ 列的所有对应`idx`的值等于 $-1$ 为真
+\item 生成Tritree类的时候, 是从 TriangleMesh 中继承网格
+\item 定义初始化时,需要继承的是网格点 node , 单元 cell , 根据 node 和 cell 初始化网格, 然后得到单元的个数 NC ,　再根据单元的个数生成两个数组 parent 和 child , 这两个数组分别是值为 $-1$ 的 $NC \times 2$ 和 $NC \times 4$ 的数组
+\item 定义叶子单元指标(即 leaf\_cell\_index ): 根据数组 child 的值为 $-1$ 的所有行维度的索引值 idx , 返回叶子单元的 idx .
+\item 定义叶子单元(即 is\_leaf\_cell): 是根据叶子单元指标 idx 来判断是否是叶子单元:若 idx 是 None , 返回的是 child[:, 0]==-1 , 是布尔型数组, 表示的意思是第 $0$ 列的所有行的值等于 $-1$ 为真;若 idx 不是 None 则返回的是 child[idx, 0] == -1 , 是布尔型数组, 表示的意思是第 $0$ 列的所有对应 idx 的值等于 $-1$ 为真
+\item 定义根单元(即 is\_root\_cell ): 是根据单元指标 idx 来判断是否是根单元: 若 idx 是 None , 返回的是 parent[:, 0]==-1 , 是布尔型数组, 表示的意思是第 $0$ 列的所有行的值等于 $-1$ 为真; 若 idx 不是 None 则返回的是 parent[idx, 0] == -1 , 是布尔型数组, 表示的意思是第 $0$ 列的所有对应 idx 的值等于 $-1$ 为真
 \end{enumerate}
 \subsection{4.加密算法}
 \begin{enumerate}
-\item 定义加密(即`refine`): 传入的数据是标记`marker`(标记是自适应加密过程中必不可少的一步,　它构成自适应加密循环的过程,自适应加密过程为: 求解 $\to$ 估计 $\to$ 标记 $\to$ 加密或放粗). 对于传入的数据`marker`若`marker == None`为真, 指标的索引`idx`就是叶子单元的索引, 否则, 叶子单元指标`idx`就是标记之后的索引. 若`idx`是`None`则返回`False`, 加密结束, 
-如果`idx`的长度大于 $0$, 则进行如下,我们定义`isMarkedCell`是长度为`NC`的布尔型数组,然后把`isMarkedCell`索引中`idx`是叶子单元的等于`True`.
+\item 定义加密(即 refine ): 传入的数据是标记 marker (标记是自适应加密过程中必不可少的一步,　它构成自适应加密循环的过程,自适应加密过程为: 求解 $\to$ 估计 $\to$ 标记 $\to$ 加密或放粗). 对于传入的数据 marker 若 marker == None为真, 指标的索引 idx 就是叶子单元的索引, 否则, 叶子单元指标 idx 就是标记之后的索引. 若 idx 是 None 则返回 False , 加密结束, 
+如果 idx 的长度大于 $0$, 则进行如下,我们定义 isMarkedCell 是长度为 NC 的布尔型数组,然后把 isMarkedCell 索引中 idx 是叶子单元的等于 True .
 \item 扩展标记单元
 \begin{figure}[H]
 \centering
@@ -634,12 +731,12 @@ case 1：如图 5,如果这个单元是叶子单元但不是被标记的单元,�
 \end{figure}
 case 2:如图 6(a)它的左边单元是叶子单元但不是被标记的单元,右边单元不是叶子单元,但是右边单元中与左边单元相邻的孩子单元是被标记的单元,那么左边单元也应该被标记.\\
 如图 6(b)它的右边单元是叶子单元但不是被标记的单元,左边单元不是叶子单元,但是左边单元中与右边单元相邻的孩子单元是被标记的单元,那么右边单元也应该被标记.\\
-扩展单元的时候我们找到是上面两种情况的叶子单元,把`isMarkedCell`索引中`idx`是上面两种情况的叶子单元的等于`True`,现在我们就找到了所有要被加密的单元.
-\item 找到加密的边和`edge2newNode`\\
-我们定义`refineFalg`是长度为`NE`的布尔型数组,通过`cell2edge`找到`isMarkedCell`的边,然后把`refineFalg`中索引是这些边的等于`True`,但是这里要除去左边是叶子单元,右边不是叶子单元或者左边不是叶子单元边,右边是叶子单元的那些边,在`refineFalg`索引是这些边的等于`False`,要加密边的总数为`NNN=refineFalg.sum()`.\\
-`edge2newNode`是长度为`NE`的数组,加密之后边上的新的点的编号为`NN+np.arange(NNN)`.
+扩展单元的时候我们找到是上面两种情况的叶子单元,把 isMarkedCell 索引中 idx 是上面两种情况的叶子单元的等于 True ,现在我们就找到了所有要被加密的单元.
+\item 找到加密的边和 edge2newNode \\
+我们定义 refineFalg 是长度为 NE 的布尔型数组,通过 cell2edge 找到 isMarkedCell 的边,然后把 refineFalg 中索引是这些边的等于 True ,但是这里要除去左边是叶子单元,右边不是叶子单元或者左边不是叶子单元边,右边是叶子单元的那些边,在 refineFalg 索引是这些边的等于 False ,要加密边的总数为 NNN=refineFalg.sum().\\
+ edge2newNode 是长度为 NE的数组,加密之后边上的新的点的编号为NN + np.arange(NNN).
 \item 加密成四个小三角形\\
-首先`NCC`是标记单元的个数,　再根据标记单元的个数生成`cell4`是值为0的`4*NC`$\times$3数组和`parent4`,`child4`分别是值为 $-1$ 的`4*NC`$\times$2 和`4*NC`$\times$4的数组,然后找到一分为四的每个小三角形的顶点,然后把连起来,最后把所有的`node`,`cell`,`parent`,`child`拼到一起.
+首先 NCC 是标记单元的个数,　再根据标记单元的个数生成 cell4 是值为0的 4*NC $\times$3数组和 parent4 , child4 分别是值为 $-1$ 的 4*NC $\times$2 和 4*NC $\times$4的数组,然后找到一分为四的每个小三角形的顶点,然后把连起来,最后把所有的 node , cell , parent , child 拼到一起.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{./figures/Figure_2.png}
@@ -666,8 +763,8 @@ self.child[idx, 0] = NC + np.arange(0, NCC)
     \centerline{协调化之后}
 \end{minipage}
 \end{figure}
-最后我们进行协调化处理,找到每条加密边的中点和对应单元的顶点把它们连在一起,这里要注意最后的`cell`的处理.\\
-然后调用`TriangleMesh(node, cell)`,生成协调化网格`Tmesh`.
+最后我们进行协调化处理,找到每条加密边的中点和对应单元的顶点把它们连在一起,这里要注意最后的 cell 的处理.\\
+然后调用 TriangleMesh(node, cell) ,生成协调化网格 Tmesh .
 \end{enumerate}
 例子1：加密圆穿过的单元
 \begin{figure}[H]
@@ -701,6 +798,7 @@ self.child[idx, 0] = NC + np.arange(0, NCC)
 \includegraphics[scale=0.6]{./figures/Figure_13.png}
 \caption{}
 \end{figure}
+基于误差均布原理，主要有三种标记策略。第一种是最大比较准则，记$\eta_h^{max}=\max\limits_{\tau\in\mathcal{T}_h}\eta_{\tau}$，从网格中选取单元误差$\eta_{\tau}>\beta\eta_h^{max}$的那些单元为需加密单元，这里$\beta\in(0,1)$为一预设的常数(一般为0.5).第二种标记策略是于1996年给出的“水桶准则”，首先对单元误差估计子$\eta_{\tau}$进行排序，然后从大到小依次加入单元到需加密单元的集合$M$,直到$\sum\limits_{\tau\in M}\eta_{\tau}^2\ge\beta\eta_h^2$，这里$\beta\in(0,1)$为一预设的常数(一般为0.2—0.5).第三种标记策略较为复杂，它假定$\eta_{\tau}=ch_{\tau}^k$，$k$与单元尺寸无光。依次假定，我们就可以估计当单元$\tau$加密后的误差，记为$\eta_{\tau,new}$，$\eta_{\tau,new}^{max}=\max\limits_{\tau\in\mathcal{T}_h}\eta_{\tau,new}$.标记$\eta_{\tau}>\eta_{\tau,new}^{max}$的单元为需加密单元。
 \subsection{2.后验误差估计}
 后验误差估计是自适应有限元方法中重要的一部分，它是根据数值解和已知数据构造单元估计子$\{\eta_{\tau}:\tau\in\mathcal{T}_h\}$和全局估计子$\eta_h^2=\sum\limits_{\tau\in\mathcal{T}_h}\eta_{\tau}^2$,来局部和全局的估计误差$e_h=u-u_h$.一个好的后验误差估计既是误差的下界也是误差的上界，即
 \begin{equation*}
@@ -766,6 +864,86 @@ D_hv(z):=\sum\limits_{i=1}^m\frac{\frac{1}{d_i}}{\sum\limits_{j=1}^m\frac{1}{d_j
 \begin{equation*}
 \eta_{D,\tau}^2=\left\|D_hu_h-\nabla u_h\right\|_{0,\tau}^2,\qquad\eta_D^2=\sum\limits_{\tau\in\mathcal{T}_h}\eta_{D,\tau}^2
 \end{equation*}
+\subsection{Darcy Forchheimer模型}
+1.Darcy Forchheimer模型描述了多孔介质$\Omega$中单相流体的稳定流动
+\begin{equation*}
+\frac{\mu}{\rho}K^{-1}\boldsymbol{u}+\frac{\beta}{\rho}\left|\boldsymbol{u}\right|\boldsymbol{u}+\nabla p=0\quad\text{in}~\Omega
+\end{equation*}
+\begin{equation*}
+\nabla\cdot\boldsymbol{u}=f \quad\text{in}~\Omega
+\end{equation*}
+\begin{equation*}
+\boldsymbol{u}\cdot\boldsymbol{n}=g \quad\text{on}~\Omega
+\end{equation*}
+其中$\boldsymbol{u}$和$p$分别是速度场和压力场，$\boldsymbol{n}$是单位外法向量，$\left|\cdot\right|$表示$\mathbb{R}^2$中的Euclid向量范数，$\rho$是正常数，$\mu$和$\beta$是密度。
+
+2.变分形式
+
+首先我们定义两个空间：
+$\boldsymbol{X}=L^3(\Omega)^2$,$\quad M=W^{1,\frac{3}{2}}(\Omega)\cap L_0^2(\Omega)$
+
+下面我们要找到$(\boldsymbol{u},p)$$\in\boldsymbol{X}\times M$满足：
+\begin{equation*}
+\begin{cases}
+\frac{\mu}{\rho}\int_{\Omega}K^{-1}\boldsymbol{u}\cdot\boldsymbol{v}\mathrm{d}x+\frac{\beta}{\rho}\int_{\Omega}\left|\boldsymbol{u}\right|\boldsymbol{u}\cdot\boldsymbol{v}\mathrm{d}x+\int_{\Omega}\nabla p\cdot\boldsymbol{v}\mathrm{d}x=0\quad\forall\boldsymbol{v}\in\boldsymbol{X}\\
+\int_{\Omega}\nabla q\cdot\boldsymbol{u}\mathrm{d}x=-\int_{\Omega}fq\mathrm{d}x+\int_{\partial\Omega}gq\mathrm{d}s\quad\forall q\in M
+\end{cases}\quad(1)
+\end{equation*}
+因此我们可以得到(1)的离散的变分形式，找到$(\boldsymbol{u}_{\mathcal{T}},p_{\mathcal{T}})$$\in\boldsymbol{X}_{\mathcal{T}}\times M_{\mathcal{T}}$满足:
+\begin{equation*}
+\begin{cases}
+\frac{\mu}{\rho}\int_{\Omega}K^{-1}\boldsymbol{u}_{\mathcal{T}}\cdot\boldsymbol{v}_{\mathcal{T}}\mathrm{d}x+\frac{\beta}{\rho}\int_{\Omega}\left|\boldsymbol{u}_{\mathcal{T}}\right|\boldsymbol{u}_{\mathcal{T}}\cdot\boldsymbol{v}_{\mathcal{T}}\mathrm{d}x+\int_{\Omega}\nabla p_{\mathcal{T}}\cdot\boldsymbol{v}_{\mathcal{T}}\mathrm{d}x=0\quad\forall\boldsymbol{v}_{\mathcal{T}}\in\boldsymbol{X}_{\mathcal{T}}\\
+\int_{\Omega}\nabla q_{\mathcal{T}}\cdot\boldsymbol{u}_{\mathcal{T}}\mathrm{d}x=-\int_{\Omega}fq_{\mathcal{T}}\mathrm{d}x+\int_{\partial\Omega}gq_{\mathcal{T}}\mathrm{d}s\quad\forall q_{\mathcal{T}}\in M_{\mathcal{T}}
+\end{cases}\quad(2)
+\end{equation*}
+3.自适应算法：
+
+对于(2)的解$(\boldsymbol{u}_{\mathcal{T}},p_{\mathcal{T}})$我们定义每个单元$T\in\mathcal{T}$的残差和边上$F\in \mathcal{F}_{\mathcal{T}}$的跳量
+\begin{equation*}
+R_{T,1}=(\boldsymbol{u}_{\mathcal{T}}):=\frac{\mu}{\rho}\nabla\cdot K^{-1}\boldsymbol{u}_{\mathcal{T}},\quad R_{T,2}=(\boldsymbol{u}_{\mathcal{T}}):=\frac{\mu}{\rho}rotK^{-1}\boldsymbol{u}_{\mathcal{T}}
+\end{equation*}
+
+\begin{equation*}
+J_{F,1}(\boldsymbol{u}_{\mathcal{T}},p_{\mathcal{T}}):=
+\begin{cases}
+[(\frac{\mu}{\rho}K^{-1}\boldsymbol{u}_{\mathcal{T}}+\frac{\beta}{\rho}\left|\boldsymbol{u}_{\mathcal{T}}\right|\boldsymbol{u}_{\mathcal{T}}+\nabla p_{\mathcal{T}})\cdot\boldsymbol{n}_F]\quad F \in \mathcal{F}_{\mathcal{T}}(\Omega)\\
+(\frac{\mu}{\rho}K^{-1}\boldsymbol{u}_{\mathcal{T}}+\frac{\beta}{\rho}\left|\boldsymbol{u}_{\mathcal{T}}\right|\boldsymbol{u}_{\mathcal{T}}+\nabla p_{\mathcal{T}})\cdot\boldsymbol{n}\quad F \in \mathcal{F}_{\mathcal{T}}\backslash \mathcal{F}_{\mathcal{T}}(\Omega)
+\end{cases}
+\end{equation*}
+
+\begin{equation*}
+J_{F,2}(\boldsymbol{u}_{\mathcal{T}}):=[(\frac{\mu}{\rho}K^{-1}\boldsymbol{u}_{\mathcal{T}}+\frac{\beta}{\rho}\left|\boldsymbol{u}_{\mathcal{T}}\right|\boldsymbol{u}_{\mathcal{T}}+\nabla p_{\mathcal{T}})\cdot\boldsymbol{t}_F]\quad F \in \mathcal{F}_{\mathcal{T}}(\Omega)
+\end{equation*}
+
+\begin{equation*}
+J_{F,3}(\boldsymbol{u}_{\mathcal{T}}):=
+\begin{cases}
+[\boldsymbol{u}_{\mathcal{T}}\cdot\boldsymbol{n}_F]\quad F \in \mathcal{F}_{\mathcal{T}}(\Omega)\\
+\boldsymbol{u}_{\mathcal{T}}\cdot\boldsymbol{n}-g\quad F \in \mathcal{F}_{\mathcal{T}}\backslash \mathcal{F}_{\mathcal{T}}(\Omega)
+\end{cases}
+\end{equation*}
+对于任意的$T\in\mathcal{T}$,我们定义局部误差估计子如下：
+\begin{equation*}
+\eta_{\mathcal{T},1}^{3/2}(\boldsymbol{u}_{\mathcal{T}},p_{\mathcal{T}},T):=\xi_{\mathcal{T}}^{3/2}(\boldsymbol{u}_{\mathcal{T}},p_{\mathcal{T}},T)+\zeta_{\mathcal{T}}^{3/2}(\boldsymbol{u}_{\mathcal{T}},T)
+\end{equation*}
+\begin{equation*}
+\eta_{\mathcal{T},2}^3(\boldsymbol{u}_{\mathcal{T}},T):=h_T^3\left\|f\right\|_{L^3(T)}^3+\sum\limits_{F\in\partial T}h_F\left\|J_{F,3}(\boldsymbol{u}_{\mathcal{T}})\right\|_{L^3(F)}^3
+\end{equation*}
+其中
+\begin{equation*}
+\xi_{\mathcal{T}}^{3/2}(\boldsymbol{u}_{\mathcal{T}},p_{\mathcal{T}},T):=h_{T}^{3/2}\left\|R_{T,1}(\boldsymbol{u}_{\mathcal{T}})\right\|_{L^{\frac{3}{2}}(T)}^{3/2}+\sum\limits_{F\in\partial T}h_F\left\|J_{F,1}(\boldsymbol{u}_{\mathcal{T}},p_{\mathcal{T}})\right\|_{L^{\frac{3}{2}}(F)}^{3/2}
+\end{equation*}
+\begin{equation*}
+\zeta_{\mathcal{T}}^{3/2}(\boldsymbol{u}_{\mathcal{T}},T):=h_{T}^{3/2}\left\|R_{T,2}(\boldsymbol{u}_{\mathcal{T}})\right\|_{L^{\frac{3}{2}}(T)}^{3/2}+\sum\limits_{F\in\partial T\cap\Omega}h_F\left\|J_{F,2}(\boldsymbol{u}_{\mathcal{T}})\right\|_{L^{\frac{3}{2}}(F)}^{3/2}
+\end{equation*}
+$h_T:=\left|T\right|^{1/2}$是$T\in\mathcal{T}$的直径，$h_F$是$F\in\mathcal{F}_{\mathcal{T}}$的长度。
+
+因此我们得到误差估计子如下：
+\begin{equation*}
+\eta_{k,1}(\boldsymbol{u}_k,p_k,\tilde{T}_k^1)=\max\limits_{T\in\mathcal{T}_k}\eta_{k,1}(\boldsymbol{u}_k,p_k,T),\quad\eta_{k,2}(\boldsymbol{u}_k,\tilde{T}_k^2)=\max\limits_{T\in\mathcal{T}_k}\eta_{k,2}(\boldsymbol{u}_k,T)
+\end{equation*}
+
+
 
 
 

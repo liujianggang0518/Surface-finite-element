@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015/Debian) (preloaded format=xelatex 2018.10.14)  5 NOV 2018 15:27
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015/Debian) (preloaded format=xelatex 2018.10.14)  12 DEC 2018 17:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2036,130 +2036,137 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 93.
 
 [3]
+Overfull \hbox (61.53941pt too wide) detected at line 138
+[] []
+ []
+
+[4]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 128.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 128.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 128.
+(hyperref)                removing `math shift' on input line 139.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 128.
+(hyperref)                removing `subscript' on input line 139.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 128.
+(hyperref)                removing `math shift' on input line 139.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 128.
+(hyperref)                removing `math shift' on input line 139.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `subscript' on input line 139.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 139.
 
 File: ./figures/picture_1.png Graphic file (type QTm)
-<use  "./figures/picture_1.png" > [4] [5]
-Overfull \hbox (8.28267pt too wide) in paragraph at lines 178--205
+<use  "./figures/picture_1.png" > [5] [6]
+Overfull \hbox (8.28267pt too wide) in paragraph at lines 228--255
  [] 
  []
 
-[6]
+[7]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 208.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\tau' on input line 208.
+(hyperref)                removing `math shift' on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 208.
+(hyperref)                removing `\tau' on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 208.
+(hyperref)                removing `subscript' on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 208.
+(hyperref)                removing `math shift' on input line 258.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                \hskip 14.0pt
-(hyperref)                replaced by space on input line 208.
+(hyperref)                replaced by space on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 208.
+(hyperref)                removing `math shift' on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 208.
+(hyperref)                removing `math shift' on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\tau' on input line 208.
+(hyperref)                removing `\tau' on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 208.
+(hyperref)                removing `subscript' on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 208.
+(hyperref)                removing `math shift' on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 208.
+(hyperref)                removing `math shift' on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\tau' on input line 208.
+(hyperref)                removing `\tau' on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 208.
+(hyperref)                removing `subscript' on input line 258.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 208.
+(hyperref)                removing `math shift' on input line 258.
 
-[7] [8]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 285.
-
+[8] [9]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 285.
+(hyperref)                removing `math shift' on input line 335.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 301.
+(hyperref)                removing `math shift' on input line 335.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 301.
+(hyperref)                removing `math shift' on input line 351.
 
-[9] [10] [11]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 351.
+
+[10] [11] [12]
 File: ./figures/Figure_21.png Graphic file (type QTm)
  <use  "./figures/Figure_21.png" >
 File: ./figures/Figure_22.png Graphic file (type QTm)
 
 <use  "./figures/Figure_22.png" >
 File: ./figures/Figure_23.png Graphic file (type QTm)
- <use  "./figures/Figure_23.png" > [12]
-File: ./figures/Figure_25.png Graphic file (type QTm)
+ <use  "./figures/Figure_23.png" > [13]
 
-<use  "./figures/Figure_25.png" > [13]
+LaTeX Warning: Citation `Wikipedia' on page 14 undefined on input line 463.
+
+File: ./figures/Figure_25.png Graphic file (type QTm)
+<use  "./figures/Figure_25.png" > [14]
 File: ./figures/dblock.pdf Graphic file (type QTm)
- <use  "./figures/dblock.pdf" > [14]
-[15]
-Overfull \hbox (6.3387pt too wide) in paragraph at lines 473--474
+ <use  "./figures/dblock.pdf" > [15]
+[16]
+Overfull \hbox (6.3387pt too wide) in paragraph at lines 524--525
 []\EU1/STKaiti(0)/m/n/14 找 到 $\OML/cmm/m/it/14 V[] \OMS/cmsy/m/n/14 ^^Z \OML/cm
 m/m/it/14 H[]\OT1/cmr/m/n/14 (\OML/cmm/m/it/14 S\OT1/cmr/m/n/14 )$ \EU1/STKaiti
 (0)/m/n/14 得 到 \EU1/DejaVuSerif(0)/m/n/14 (2) \EU1/STKaiti(0)/m/n/14 线 性 曲 面 有 
@@ -2169,58 +2176,98 @@ it/14 s\OT1/cmr/m/n/14 )\OML/cmm/m/it/14 '[]\OT1/cmr/m/n/14 (\OML/cmm/m/it/14 x
 \OT1/cmr/m/n/14 )$\EU1/DejaVuSerif(0)/m/n/14 ,
  []
 
-[16] [17]
+[17]
+File: ./figures/Figure_50.png Graphic file (type QTm)
+ <use  "./figures/Figure_50.png" >
+Overfull \hbox (16.95415pt too wide) in paragraph at lines 588--589
+ [][] 
+ []
+
+File: ./figures/Figure_52.png Graphic file (type QTm)
+<use  "./figures/Figure_52.png" >
+Overfull \hbox (16.95415pt too wide) in paragraph at lines 593--594
+ [][] 
+ []
+
+[18] [19]
+File: ./figures/Figure_51.png Graphic file (type QTm)
+ <use  "./figures/Figure_51.png" >
+Overfull \hbox (16.95415pt too wide) in paragraph at lines 603--604
+ [][] 
+ []
+
+File: ./figures/Figure_53.png Graphic file (type QTm)
+<use  "./figures/Figure_53.png" >
+Overfull \hbox (16.95415pt too wide) in paragraph at lines 608--609
+ [][] 
+ []
+
+[20] [21]
 File: ./figures/picture_2.png Graphic file (type QTm)
- <use  "./figures/picture_2.png" > [18]
+ <use  "./figures/picture_2.png" > [22]
 File: ./figures/Figure_3.png Graphic file (type QTm)
 
 <use  "./figures/Figure_3.png" >
 File: ./figures/Figure_2.png Graphic file (type QTm)
- <use  "./figures/Figure_2.png" > [19] [20]
+ <use  "./figures/Figure_2.png" > [23]
+File: ./figures/Figure_31.png Graphic file (type QTm)
+
+<use  "./figures/Figure_31.png" >
+File: ./figures/Figure_30.png Graphic file (type QTm)
+ <use  "./figures/Figure_30.png" > [24]
 File: ./figures/Figure_8.png Graphic file (type QTm)
 
-<use  "./figures/Figure_8.png" >
+<use  "./figures/Figure_8.png" > [25]
 File: ./figures/Figure_4.png Graphic file (type QTm)
  <use  "./figures/Figure_4.png" >
 File: ./figures/Figure_5.png Graphic file (type QTm)
 
-<use  "./figures/Figure_5.png" > [21]
+<use  "./figures/Figure_5.png" > [26]
 File: ./figures/Figure_2.png Graphic file (type QTm)
- <use  "./figures/Figure_2.png" > [22]
+ <use  "./figures/Figure_2.png" >
 File: ./figures/Figure_9.png Graphic file (type QTm)
 
 <use  "./figures/Figure_9.png" >
 File: ./figures/Figure_7.png Graphic file (type QTm)
- <use  "./figures/Figure_7.png" >
+ <use  "./figures/Figure_7.png" > [27]
 File: ./figures/Figure_12.png Graphic file (type QTm)
 
-<use  "./figures/Figure_12.png" > [23]
+<use  "./figures/Figure_12.png" >
 File: ./figures/Figure_11.png Graphic file (type QTm)
- <use  "./figures/Figure_11.png" >
-[24] [25]
+ <use  "./figures/Figure_11.png" > [28]
+[29] [30]
 File: ./figures/Figure_13.png Graphic file (type QTm)
- <use  "./figures/Figure_13.png" > [26]
+ <use  "./figures/Figure_13.png" > [31]
 File: ./figures/Figure_24.png Graphic file (type QTm)
 
-<use  "./figures/Figure_24.png" > [27] [28] (./main.bbl
+<use  "./figures/Figure_24.png" > [32] [33] [34]
+Overfull \hbox (48.12747pt too wide) detected at line 898
+[]  \OT1/cmr/m/n/14 (2)
+ []
+
+[35] (./main.bbl
 
 LaTeX Warning: Empty `thebibliography' environment on input line 3.
 
-) [29]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 775.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 775.
+) [36]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 953.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 953.
  (./main.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 775.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 775.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 775.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 953.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 953.
+
+
+LaTeX Warning: There were undefined references.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 953.
  ) 
 Here is how much of TeX's memory you used:
- 41585 strings out of 493638
- 828636 string characters out of 6146795
- 875008 words of memory out of 5000000
- 44354 multiletter control sequences out of 15000+600000
+ 41618 strings out of 493638
+ 829843 string characters out of 6146795
+ 879008 words of memory out of 5000000
+ 44381 multiletter control sequences out of 15000+600000
  16211 words of font info for 103 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
- 50i,13n,80p,10439b,700s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 50i,13n,80p,10439b,706s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on main.pdf (29 pages).
+Output written on main.pdf (36 pages).
